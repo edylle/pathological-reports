@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, user-scalable=yes"
+	charset="UTF-8" />
+
+<title>Pathological Reports - Login</title>
+
+<link rel="stylesheet" type="text/css" th:href="@{/css/style-login.css}" />
+
+<link rel="icon" th:href="@{/img/favicon.png}" type="image/ico" />
+<style th:inline="text">
+body {
+	background-image: url([[@{/img/login-background.jpg}]]);
+}
+</style>
+</head>
+<body>
+
+	<div class="login-page">
+		<div class="form-header">
+			<div class="login-logo">
+				<img th:src="@{/img/dog-paw.png}"/>
+			</div>
+		</div>
+		<div class="form">
+			
+			<form id="form-password" class="password-form" method="post" th:action="@{/login/recover-password}">
+
+				<input type="email" placeholder="e-mail" name="email" required="required" maxlength="128" />
+
+				<button type="submit">Send</button>
+
+				<p class="message">
+					Already have an account? <a href="#" data-target-formId="form-login">Sign in</a>
+				</p>
+
+			</form>
+
+			<p id="p-login-error" th:if="${loginError}" th:text="${errorMessage}" class="p-error"></p>
+			<p id="p-login-success" th:if="${!#strings.isEmpty(successMessage)}" th:text="${successMessage}" class="p-success"></p>
+
+			<form id="form-login" class="login-form" method="post" th:action="@{/login}">
+
+				<input type="text" placeholder="username or e-mail" required="required" name="username" maxlength="128"  autofocus="autofocus" />
+				<input type="password" placeholder="password" required="required" name="password" maxlength="16" />
+
+				<label for="check-remember-me" class="label-checkbox">
+					<input id="check-remember-me" type="checkbox" name="remember-me" class="input-checkbox" /> Keep me signed in
+				</label>
+
+				<button type="submit">Sign in</button>
+				
+				<p class="message">
+					<a href="#" data-target-formId="form-password">Forgot your password?</a>
+				</p>
+
+			</form>
+		</div>
+	</div>
+
+	<script th:src="@{/js/vendor/jquery-3.2.1.min.js}"></script>
+	<script th:src="@{/js/main-login.js}"></script>
+
+</body>
+</html>
