@@ -36,10 +36,6 @@ body {
 	background: rgba(33, 61, 31, .8);
 }
 
-.form:before {
-	
-}
-
 .form-header {
 	background: #28b185;
 	border-radius: 10px 10px 0 0;

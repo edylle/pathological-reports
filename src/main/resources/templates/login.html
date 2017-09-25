@@ -42,7 +42,7 @@ body {
 			<p id="p-login-error" th:if="${loginError}" th:text="${errorMessage}" class="p-error"></p>
 			<p id="p-login-success" th:if="${!#strings.isEmpty(successMessage)}" th:text="${successMessage}" class="p-success"></p>
 
-			<form id="form-login" class="login-form" method="post" th:action="@{/login}">
+			<form id="form-login" method="post" th:action="@{/login}">
 
 				<input type="text" placeholder="username or e-mail" required="required" name="username" maxlength="128"  autofocus="autofocus" />
 				<input type="password" placeholder="password" required="required" name="password" maxlength="16" />
