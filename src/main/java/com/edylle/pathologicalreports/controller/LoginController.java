@@ -11,6 +11,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.edylle.pathologicalreports.exception.EmailException;
 import com.edylle.pathologicalreports.service.RecoverPasswordService;
+import com.edylle.pathologicalreports.utils.Messages;
 import com.edylle.pathologicalreports.utils.UserUtils;
 
 @Controller
@@ -19,6 +20,8 @@ public class LoginController {
 
 	@Autowired
 	private RecoverPasswordService recoverPasswordService;
+	@Autowired
+	 Messages messages;
 
 	@RequestMapping
 	public String login() {
@@ -36,7 +39,7 @@ public class LoginController {
 	@RequestMapping("login-error")
 	public String loginError(Model model) {
 		model.addAttribute("loginError", true);
-		model.addAttribute("errorMessage", "Authentication failed");
+		model.addAttribute("errorMessage", messages.getMessageBy("authentication.failed", null));
 
 		return "login";
 	}
@@ -44,14 +47,14 @@ public class LoginController {
 	@RequestMapping("access-denied")
 	public String accessDenied(Model model) {
 		model.addAttribute("loginError", true);
-		model.addAttribute("errorMessage", "Access denied");
+		model.addAttribute("errorMessage", messages.getMessageBy("access.denied", null));
 
 		return "login";
 	}
 
 	@RequestMapping("logout")
 	public String logout(Model model) {
-		model.addAttribute("successMessage", "You have been successfully logged out");
+		model.addAttribute("successMessage", messages.getMessageBy("message.logged.out", null));
 
 		return "login";
 	}
@@ -61,7 +64,7 @@ public class LoginController {
 		recoverPasswordService.recoverPasswordBy(email);
 
 		ModelAndView mv = new ModelAndView("login");
-		mv.addObject("successMessage", "You'll receive an e-mail with further instructions.");
+		mv.addObject("successMessage", messages.getMessageBy("message.email.instructions", null));
 		return mv;
 	}
 
