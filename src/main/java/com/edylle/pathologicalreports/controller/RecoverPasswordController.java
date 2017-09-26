@@ -27,15 +27,16 @@ public class RecoverPasswordController {
 
 	private String token;
 
+	@RequestMapping(value = "/recover")
 	public ModelAndView recoverPassword(@RequestParam("token") String token) {
 		ModelAndView mv = new ModelAndView("recover-password");
 
 		if (recoverPasswordService.findByToken(token) != null) {
 			this.token = token;
-			mv.addObject("successMessageStyle", "Type new password");
+			mv.addObject("successMessage", "Type new password");
 
 		} else {
-			mv.addObject("errorMessageStyle", new TokenException().getMessage());
+			mv.addObject("errorMessage", new TokenException().getMessage());
 		}
 
 		mv.addObject("password", new PasswordVO());
@@ -54,12 +55,12 @@ public class RecoverPasswordController {
 		try {
 			recoverPasswordService.updatePassword(password, token);
 
-			mv.addObject("successMessageStyle", "Password successfully updated!");
+			mv.addObject("successMessage", "Password successfully updated!");
 
 			token = null;
 			return mv;
 		} catch (Exception e) {
-			mv.addObject("errorMessageStyle", e.getMessage());
+			mv.addObject("errorMessage", e.getMessage());
 			return mv;
 		}
 	}

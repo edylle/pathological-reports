@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" charset="UTF-8" />
+	
+	<title>Pathological Reports - Select role</title>
+	
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style-login.css}" />
+	
+	<link rel="icon" th:href="@{/img/favicon.png}" type="image/ico" />
+	<style th:inline="text">
+		body {
+			background-image: url([[@{/img/login-background.jpg}]]);
+		}
+	</style>
+
+	<script type="text/javascript">
+		function redirectToRoleHomeUrl() {
+			var e = document.getElementById("opt-role");
+			var selectedHomeUrl = e.options[e.selectedIndex].value;
+
+			window.location = selectedHomeUrl;
+		}
+	</script>
+</head>
+<body>
+
+	<div class="login-page">
+		<div class="form-header">
+			<div class="login-logo">
+				<img th:src="@{/img/dog-paw.png}"/>
+			</div>
+		</div>
+		<div class="form">
+
+			<p class="p-success">Select your Role</p>
+
+			<select id="opt-role" name="role" style="height: 30px; width: 200px; text-align: center; margin-bottom: 40px; margin-top: 25px;">
+				<option th:each="role : ${roles}" th:value="@{${role.homeUrl}}"
+					    th:text="${role.description}"></option>
+			</select>
+
+			<button type="submit" onclick="redirectToRoleHomeUrl()">Sign in</button>
+
+		</div>
+	</div>
+
+</body>
+</html>

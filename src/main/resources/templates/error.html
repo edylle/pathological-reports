@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" charset="UTF-8" />
+
+	<title>Pathological Reports - Error page</title>
+
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style-error.css}" />
+	<link rel="icon" th:href="@{/img/favicon.png}" type="image/ico" />
+
+	<style th:inline="text">
+		body {
+			background-image: url([[@{/img/error-background.png}]]);
+		}
+	</style>
+</head>
+<body>
+
+	<div class="form">
+		<form  method="get" th:action="@{/login}">
+
+			<div class="div-message">
+				<p>Something went wrong</p>
+			</div>
+
+			<button type="submit">Go back to sign in page</button>
+
+		</form>
+	</div>
+
+</body>
+</html>
