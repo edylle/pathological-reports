@@ -2,11 +2,10 @@ package com.edylle.pathologicalreports.exception;
 
 public class EmailException extends Exception {
 
-	private static final long serialVersionUID = 7886778749366311533L;
-	private static final String MESSAGE = "There was an error while sending the e-mail";
+	private static final long serialVersionUID = -6706056415987974408L;
 
-	public EmailException() {
-		super(MESSAGE);
+	public EmailException(String message) {
+		super(message);
 	}
 
 }

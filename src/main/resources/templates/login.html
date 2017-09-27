@@ -6,7 +6,7 @@
 	content="width=device-width, initial-scale=1, user-scalable=yes"
 	charset="UTF-8" />
 
-<title th:text="#{pathological.reports} + ' - ' + #{sign.in}"></title>
+<title th:text="#{label.pathological.reports} + ' - ' + #{label.sign.in}"></title>
 
 <link rel="stylesheet" type="text/css" th:href="@{/css/style-login.css}" />
 
@@ -31,11 +31,11 @@ body {
 
 				<input type="email" th:placeholder="#{placeholder.email}" name="email" required="required" maxlength="128" />
 
-				<button type="submit" th:text="#{send}"></button>
+				<button type="submit" th:text="#{label.send}"></button>
 
 				<p class="message">
-					<span th:text="#{already.have.an.account}"></span>
-					<a href="#" data-target-formId="form-login" th:text="#{sign.in}"></a>
+					<span th:text="#{label.already.have.an.account}"></span>
+					<a href="#" data-target-formId="form-login" th:text="#{label.sign.in}"></a>
 				</p>
 
 			</form>
@@ -49,13 +49,13 @@ body {
 				<input type="password" th:placeholder="#{placeholder.password}" required="required" name="password" maxlength="16" />
 
 				<label for="check-remember-me" class="label-checkbox">
-					<input id="check-remember-me" type="checkbox" name="remember-me" class="input-checkbox" th:text="#{keep.me.signed.in}"/>
+					<input id="check-remember-me" type="checkbox" name="remember-me" class="input-checkbox" th:text="#{label.keep.me.signed.in}"/>
 				</label>
 
-				<button type="submit" th:text="#{sign.in}"></button>
+				<button type="submit" th:text="#{label.sign.in}"></button>
 				
 				<p class="message">
-					<a href="#" data-target-formId="form-password" th:text="#{forgot.your.password}"></a>
+					<a href="#" data-target-formId="form-password" th:text="#{label.forgot.your.password}"></a>
 				</p>
 
 			</form>

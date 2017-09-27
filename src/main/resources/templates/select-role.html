@@ -4,7 +4,7 @@
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" charset="UTF-8" />
 	
-	<title>Pathological Reports - Select role</title>
+	<title th:text="#{label.pathological.reports} + ' - ' + #{label.select.role}"></title>
 	
 	<link rel="stylesheet" type="text/css" th:href="@{/css/style-login.css}" />
 	
@@ -34,14 +34,14 @@
 		</div>
 		<div class="form">
 
-			<p class="p-success">Select your Role</p>
+			<p class="p-success" th:text="#{label.select.your.role}"></p>
 
 			<select id="opt-role" name="role" style="height: 30px; width: 200px; text-align: center; margin-bottom: 40px; margin-top: 25px;">
 				<option th:each="role : ${roles}" th:value="@{${role.homeUrl}}"
 					    th:text="${role.description}"></option>
 			</select>
 
-			<button type="submit" onclick="redirectToRoleHomeUrl()">Sign in</button>
+			<button type="submit" th:text="#{label.sign.in}" onclick="redirectToRoleHomeUrl()"></button>
 
 		</div>
 	</div>

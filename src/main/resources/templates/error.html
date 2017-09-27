@@ -4,7 +4,7 @@
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" charset="UTF-8" />
 
-	<title>Pathological Reports - Error page</title>
+	<title th:text="#{label.pathological.reports} + ' - ' + #{label.error.page}"></title>
 
 	<link rel="stylesheet" type="text/css" th:href="@{/css/style-error.css}" />
 	<link rel="icon" th:href="@{/img/favicon.png}" type="image/ico" />
@@ -21,10 +21,10 @@
 		<form  method="get" th:action="@{/login}">
 
 			<div class="div-message">
-				<p>Something went wrong</p>
+				<p th:text="#{message.error.page}"></p>
 			</div>
 
-			<button type="submit">Go back to sign in page</button>
+			<button type="submit" th:text="#{label.back.to.label.sign.in.page}"></button>
 
 		</form>
 	</div>
