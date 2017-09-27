@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -13,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.edylle.pathologicalreports.exception.TokenException;
+import com.edylle.pathologicalreports.exception.BusinessException;
+import com.edylle.pathologicalreports.exception.InfrastructureException;
 import com.edylle.pathologicalreports.model.vo.PasswordVO;
 import com.edylle.pathologicalreports.service.RecoverPasswordService;
+import com.edylle.pathologicalreports.utils.Messages;
 
 @Controller
 @RequestMapping("/recover-password")
@@ -24,19 +27,21 @@ public class RecoverPasswordController {
 
 	@Autowired
 	private RecoverPasswordService recoverPasswordService;
+	@Autowired
+	private Messages messages;
 
 	private String token;
 
 	@RequestMapping(value = "/recover")
-	public ModelAndView recoverPassword(@RequestParam("token") String token) {
+	public ModelAndView recoverPassword(@RequestParam(name = "token", value = "", required = false) String token) {
 		ModelAndView mv = new ModelAndView("recover-password");
 
-		if (recoverPasswordService.findByToken(token) != null) {
+		if (!StringUtils.isEmpty(token) && recoverPasswordService.findByToken(token) != null) {
 			this.token = token;
-			mv.addObject("successMessage", "Type new password");
+			mv.addObject("successMessage", messages.getMessageBy("label.type.new.password"));
 
 		} else {
-			mv.addObject("errorMessage", new TokenException().getMessage());
+			mv.addObject("errorMessage", messages.getMessageBy("message.token.exception"));
 		}
 
 		mv.addObject("password", new PasswordVO());
@@ -55,12 +60,16 @@ public class RecoverPasswordController {
 		try {
 			recoverPasswordService.updatePassword(password, token);
 
-			mv.addObject("successMessage", "Password successfully updated!");
+			mv.addObject("successMessage", messages.getMessageBy("message.password.updated"));
 
 			token = null;
 			return mv;
-		} catch (Exception e) {
+		} catch (BusinessException | InfrastructureException e) {
 			mv.addObject("errorMessage", e.getMessage());
+			return mv;
+
+		} catch (Exception e) {
+			mv.addObject("errorMessage", messages.getMessageBy("message.sorry.error"));
 			return mv;
 		}
 	}

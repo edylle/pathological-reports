@@ -16,12 +16,15 @@ import org.springframework.stereotype.Service;
 
 import com.edylle.pathologicalreports.exception.EmailException;
 import com.edylle.pathologicalreports.properties.EmailProperties;
+import com.edylle.pathologicalreports.utils.Messages;
 
 @Service
 public class EmailService {
 
 	@Autowired
 	private EmailProperties emailProperties;
+	@Autowired
+	private Messages messages;
 
 	public void send(String email, String token) throws EmailException {
 		Properties properties = System.getProperties();
@@ -43,34 +46,18 @@ public class EmailService {
 			message.setFrom(new InternetAddress(emailProperties.getUsername()));
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
 
-			message.setSubject("Pathological Reports - Recover password");
+			message.setSubject(messages.getMessageBy("label.pathological.reports").concat(" - ").concat(messages.getMessageBy("label.recover.password")));
 			message.setText(createBody(emailProperties.getApplicationCtxPath(), token));
 
 			Transport.send(message);
 		} catch (MessagingException mex) {
 			mex.printStackTrace();
-			throw new EmailException();
+			throw new EmailException(messages.getMessageBy("message.email.exception"));
 		}
 	}
 
 	private String createBody(String contextPath, String token) {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append("A request to redefine your password was made.")
-		  .append("\n")
-		  .append("Click the link below to redefine your password:")
-		  .append("\n\n")
-		  .append(contextPath)
-		  .append("/recuperar-senha-web")
-		  .append("/recuperar")
-		  .append("?token=")
-		  .append(token)
-		  .append("\n\n")
-		  .append("If you did not make this request, please ignore this e-mail.")
-		  .append("\n\n")
-		  .append("Best regards, Pathological Reports team");
-
-		return sb.toString();
+		return messages.getMessageBy("message.email.body", contextPath, token);
 	}
 	
 }

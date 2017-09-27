@@ -1,10 +1,33 @@
 package com.edylle.pathologicalreports.model.enumeration;
 
+import java.util.EnumSet;
+
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.edylle.pathologicalreports.utils.Messages;
+
 public enum RoleEnum {
 
-	ADMIN("Administrator", "/admin/home"),
-	PROFESSOR("Professor", "/professor/home"),
-	STUDENT("Student", "/student/home");
+	ADMIN("role.admin.description", "/admin/home"),
+	PROFESSOR("role.professor.description", "/professor/home"),
+	STUDENT("role.student.description", "/student/home");
+
+	@Component
+	public static class RoleEnumServiceInjector {
+		@Autowired
+		private Messages messages;
+
+		@PostConstruct
+		public void postConstruct() {
+			for (RoleEnum role : EnumSet.allOf(RoleEnum.class))
+				role.setMessages(messages);
+		}
+	}
+
+	private Messages messages;
 
 	private String springSecurityRole;
 	private String description;
@@ -21,11 +44,15 @@ public enum RoleEnum {
 	}
 
 	public String getDescription() {
-		return description;
+		return messages.getMessageBy(description);
 	}
 
 	public String getHomeUrl() {
 		return homeUrl;
+	}
+
+	public void setMessages(Messages messages) {
+		this.messages = messages;
 	}
 
 	public static RoleEnum getSpringRoleBy(String springRole) {

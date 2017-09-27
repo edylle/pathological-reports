@@ -50,7 +50,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 				return "/login/access-denied";
 			}
 
-			// User has multiple roles
+		// User has multiple roles
 		} else {
 			return "/login/select-role";
 		}

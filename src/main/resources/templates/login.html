@@ -6,7 +6,7 @@
 	content="width=device-width, initial-scale=1, user-scalable=yes"
 	charset="UTF-8" />
 
-<title>Pathological Reports - Login</title>
+<title th:text="#{label.pathological.reports} + ' - ' + #{label.sign.in}"></title>
 
 <link rel="stylesheet" type="text/css" th:href="@{/css/style-login.css}" />
 
@@ -29,12 +29,13 @@ body {
 			
 			<form id="form-password" class="password-form" method="post" th:action="@{/login/recover-password}">
 
-				<input type="email" placeholder="e-mail" name="email" required="required" maxlength="128" />
+				<input type="email" th:placeholder="#{placeholder.email}" name="email" required="required" maxlength="128" />
 
-				<button type="submit">Send</button>
+				<button type="submit" th:text="#{label.send}"></button>
 
 				<p class="message">
-					Already have an account? <a href="#" data-target-formId="form-login">Sign in</a>
+					<span th:text="#{label.already.have.an.account}"></span>
+					<a href="#" data-target-formId="form-login" th:text="#{label.sign.in}"></a>
 				</p>
 
 			</form>
@@ -44,17 +45,17 @@ body {
 
 			<form id="form-login" method="post" th:action="@{/login}">
 
-				<input type="text" placeholder="username or e-mail" required="required" name="username" maxlength="128"  autofocus="autofocus" />
-				<input type="password" placeholder="password" required="required" name="password" maxlength="16" />
+				<input type="text" th:placeholder="#{placeholder.username.or.email}" required="required" name="username" maxlength="128"  autofocus="autofocus" />
+				<input type="password" th:placeholder="#{placeholder.password}" required="required" name="password" maxlength="16" />
 
 				<label for="check-remember-me" class="label-checkbox">
-					<input id="check-remember-me" type="checkbox" name="remember-me" class="input-checkbox" /> Keep me signed in
+					<input id="check-remember-me" type="checkbox" name="remember-me" class="input-checkbox" th:text="#{label.keep.me.signed.in}"/>
 				</label>
 
-				<button type="submit">Sign in</button>
+				<button type="submit" th:text="#{label.sign.in}"></button>
 				
 				<p class="message">
-					<a href="#" data-target-formId="form-password">Forgot your password?</a>
+					<a href="#" data-target-formId="form-password" th:text="#{label.forgot.your.password}"></a>
 				</p>
 
 			</form>

@@ -9,24 +9,27 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import com.edylle.pathologicalreports.exception.BusinessException;
 import com.edylle.pathologicalreports.exception.EmailException;
+import com.edylle.pathologicalreports.exception.InfrastructureException;
 import com.edylle.pathologicalreports.exception.TokenException;
 import com.edylle.pathologicalreports.model.entity.RecoverPassword;
 import com.edylle.pathologicalreports.model.entity.User;
 import com.edylle.pathologicalreports.model.vo.PasswordVO;
 import com.edylle.pathologicalreports.repository.RecoverPasswordRepository;
+import com.edylle.pathologicalreports.utils.Messages;
 
 @Service
 public class RecoverPasswordService {
 
 	@Autowired
 	private RecoverPasswordRepository recoverPasswordRepository;
-
 	@Autowired
 	private EmailService emailService;
-
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private Messages messages;
 
 	public RecoverPassword findByToken(String token) {
 		return recoverPasswordRepository.findOne(token);
@@ -63,7 +66,7 @@ public class RecoverPasswordService {
 		RecoverPassword recoverPassword = findByToken(token);
 
 		if (recoverPassword == null) {
-			throw new TokenException();
+			throw new TokenException(messages.getMessageBy("message.token.exception"));
 		}
 
 		User usuario = recoverPassword.getUser();
@@ -72,19 +75,18 @@ public class RecoverPasswordService {
 		try {
 			userService.update(usuario);
 		} catch (Exception e) {
-			throw new Exception("Sorry, an error has occurred.");
+			throw new InfrastructureException(messages.getMessageBy("message.sorry.error"));
 		}
 
 		delete(recoverPassword);
 	}
 
-	private void validateUpdate(PasswordVO vo) throws IllegalArgumentException {
+	private void validateUpdate(PasswordVO vo) throws BusinessException {
 		if (!vo.getPassword().equals(vo.getConfirmPassword())) {
-			throw new IllegalArgumentException("The passwords don't match");
+			throw new BusinessException(messages.getMessageBy("message.passwords.dont.match"));
 		}
-
-		if (!StringUtils.isEmpty(vo.getPassword()) && vo.getPassword().length() < 5) {
-			throw new IllegalArgumentException("The new password must have 5 characters at least");
+		if (!StringUtils.isEmpty(vo.getPassword()) && vo.getPassword().length() < 5 || vo.getPassword().length() > 16) {
+			throw new BusinessException(messages.getMessageBy("message.new.password.lenght.validation"));
 		}
 	}
 
