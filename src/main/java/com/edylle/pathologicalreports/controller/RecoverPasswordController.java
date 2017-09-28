@@ -15,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.edylle.pathologicalreports.exception.BusinessException;
-import com.edylle.pathologicalreports.exception.InfrastructureException;
 import com.edylle.pathologicalreports.model.vo.PasswordVO;
 import com.edylle.pathologicalreports.service.RecoverPasswordService;
 import com.edylle.pathologicalreports.utils.Messages;
@@ -38,7 +37,7 @@ public class RecoverPasswordController {
 
 		if (!StringUtils.isEmpty(token) && recoverPasswordService.findByToken(token) != null) {
 			this.token = token;
-			mv.addObject("successMessage", messages.getMessageBy("label.type.new.password"));
+			mv.addObject("infoMessage", messages.getMessageBy("label.type.new.password"));
 
 		} else {
 			mv.addObject("errorMessage", messages.getMessageBy("message.token.exception"));
@@ -51,25 +50,31 @@ public class RecoverPasswordController {
 
 	@RequestMapping(value = "/redefine-password", method = RequestMethod.POST)
 	public ModelAndView redefinePassword(@ModelAttribute("password") @Validated PasswordVO password, Errors errors, RedirectAttributes attributes) {
-		ModelAndView mv = new ModelAndView("recover-password");
+		ModelAndView mv = new ModelAndView();
 
 		if (errors.hasErrors()) {
-			return mv;
+			return new ModelAndView("recover-password");
 		}
 
 		try {
 			recoverPasswordService.updatePassword(password, token);
 
 			mv.addObject("successMessage", messages.getMessageBy("message.password.updated"));
+			mv.setViewName("redirect:/login");
 
 			token = null;
 			return mv;
-		} catch (BusinessException | InfrastructureException e) {
+		} catch (BusinessException e) {
 			mv.addObject("errorMessage", e.getMessage());
+			mv.setViewName("recover-password");
+
 			return mv;
 
 		} catch (Exception e) {
 			mv.addObject("errorMessage", messages.getMessageBy("message.sorry.error"));
+			mv.setViewName("redirect:/login");
+
+			token = null;
 			return mv;
 		}
 	}

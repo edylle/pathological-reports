@@ -18,7 +18,7 @@ import com.edylle.pathologicalreports.utils.TokenUtils;
 @Table(name = "RECOVER_PASSWORD")
 public class RecoverPassword implements Serializable {
 
-	private static final long serialVersionUID = -7709468015340302041L;
+	private static final long serialVersionUID = 3394409959926602876L;
 
 	@Id
 	@Column(name = "TOKEN", length = 32)
@@ -31,6 +31,10 @@ public class RecoverPassword implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "DATE_REQUESTED", nullable = false)
 	private Date dateRequested;
+
+	public RecoverPassword() {
+
+	}
 
 	public RecoverPassword(User user) {
 		this.token = TokenUtils.generateTokenOf(32); // same size as the token Id column length

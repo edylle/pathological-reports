@@ -11,7 +11,6 @@ import org.springframework.util.StringUtils;
 
 import com.edylle.pathologicalreports.exception.BusinessException;
 import com.edylle.pathologicalreports.exception.EmailException;
-import com.edylle.pathologicalreports.exception.InfrastructureException;
 import com.edylle.pathologicalreports.exception.TokenException;
 import com.edylle.pathologicalreports.model.entity.RecoverPassword;
 import com.edylle.pathologicalreports.model.entity.User;
@@ -61,6 +60,7 @@ public class RecoverPasswordService {
 		}
 	}
 
+	@Transactional
 	public void updatePassword(PasswordVO vo, String token) throws Exception {
 		validateUpdate(vo);
 		RecoverPassword recoverPassword = findByToken(token);
@@ -72,12 +72,7 @@ public class RecoverPasswordService {
 		User usuario = recoverPassword.getUser();
 		usuario.setPassword(vo.getPassword());
 
-		try {
-			userService.update(usuario);
-		} catch (Exception e) {
-			throw new InfrastructureException(messages.getMessageBy("message.sorry.error"));
-		}
-
+		userService.update(usuario);
 		delete(recoverPassword);
 	}
 
@@ -86,7 +81,7 @@ public class RecoverPasswordService {
 			throw new BusinessException(messages.getMessageBy("message.passwords.dont.match"));
 		}
 		if (!StringUtils.isEmpty(vo.getPassword()) && vo.getPassword().length() < 5 || vo.getPassword().length() > 16) {
-			throw new BusinessException(messages.getMessageBy("message.new.password.lenght.validation"));
+			throw new BusinessException(messages.getMessageBy("message.new.password.length.validation"));
 		}
 	}
 
