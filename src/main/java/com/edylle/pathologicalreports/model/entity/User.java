@@ -58,7 +58,7 @@ public class User implements Serializable {
 
 	@Cascade({ CascadeType.ALL })
 	@ElementCollection(targetClass = RoleEnum.class, fetch = FetchType.EAGER)
-	@JoinTable(name = "ROLE_USER", joinColumns = @JoinColumn(name = "EMAIL_USER"))
+	@JoinTable(name = "ROLE_USER", joinColumns = @JoinColumn(name = "USERNAME_USER"))
 	@Column(name = "ROLE", length = 16, nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Set<RoleEnum> roles;

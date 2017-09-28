@@ -10,7 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.edylle.pathologicalreports.exception.EmailException;
-import com.edylle.pathologicalreports.model.enumeration.RoleEnum;
 import com.edylle.pathologicalreports.service.RecoverPasswordService;
 import com.edylle.pathologicalreports.utils.Messages;
 import com.edylle.pathologicalreports.utils.UserUtils;
@@ -25,21 +24,26 @@ public class LoginController {
 	private Messages messages;
 
 	@RequestMapping
-	public String login() {
+	public String login(Model model,
+			@RequestParam(name = "successMessage", value = "", required = false) String sucessMessage,
+			@RequestParam(name = "errorMessage", value = "", required = false) String errorMessage) {
+
 		if (UserUtils.isUserLogged()) {
 			if (UserUtils.getUser().getRoles().size() == 1) {
 				return "redirect:".concat(UserUtils.getUser().getRoles().iterator().next().getHomeUrl());
 			} else {
-				return "redirect:".concat("/login/select-role");
+				return "redirect:/login/select-role";
 			}
 		}
+
+		model.addAttribute("successMessage", sucessMessage);
+		model.addAttribute("errorMessage", errorMessage);
 
 		return "login";
 	}
 
 	@RequestMapping("login-error")
 	public String loginError(Model model) {
-		model.addAttribute("loginError", true);
 		model.addAttribute("errorMessage", messages.getMessageBy("label.authentication.failed"));
 
 		return "login";
@@ -47,7 +51,6 @@ public class LoginController {
 
 	@RequestMapping("access-denied")
 	public String accessDenied(Model model) {
-		model.addAttribute("loginError", true);
 		model.addAttribute("errorMessage", messages.getMessageBy("label.access.denied"));
 
 		return "login";
@@ -66,14 +69,14 @@ public class LoginController {
 
 		ModelAndView mv = new ModelAndView("login");
 		mv.addObject("successMessage", messages.getMessageBy("message.email.instructions"));
+
 		return mv;
 	}
 
 	@RequestMapping("select-role")
 	public ModelAndView selectRole() {
 		ModelAndView mv = new ModelAndView("select-role");
-		//mv.addObject("roles", UserUtils.getUser().getRoles());
-		mv.addObject("roles", RoleEnum.values());
+		mv.addObject("roles", UserUtils.getUser().getRoles());
 
 		return mv;
 	}
