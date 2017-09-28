@@ -6,7 +6,6 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -18,20 +17,14 @@ public class Messages {
 	private MessageSource messageSource;
 
 	private MessageSourceAccessor accessor;
-	private Locale portugueLocale;
 
 	@PostConstruct
 	private void init() {
 		accessor = new MessageSourceAccessor(messageSource);
-		portugueLocale = new Locale("pt");
 	}
 
 	public String getMessageBy(String value) {
-		if (!portugueLocale.getLanguage().equals(LocaleContextHolder.getLocaleContext().getLocale().getLanguage())) {
-			return accessor.getMessage(value, Locale.ENGLISH);
-		}
-
-		return accessor.getMessage(value, portugueLocale);
+		return accessor.getMessage(value);
 	}
 
 	public String getMessageBy(String value, Locale locale) {
