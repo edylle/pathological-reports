@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="users/layout">
+
+	<section layout:fragment="content">
+
+		<div class="container container-content">
+			<form>
+				<div layout:include="users/messages"></div>
+			</form>
+
+			<form method="get" th:action="@{/admin/find-users}" th:object="${user}">
+				<div class="form-group">
+					<select class="custom-select" th:field="*{role}">
+						<option value="" class="select-option" th:text="'- ' + #{label.select.role} + ' -'" />
+						<option th:each="role : ${getRoles}" th:value="${role}" th:text="${role.description}" />
+					</select>
+				</div>
+
+				<div class="form-group">
+				 	<div class="input-group mb-2 mb-sm-0">
+						<input type="text" class="form-control" th:field="*{usernameOrEmail}" th:placeholder="#{placeholder.username.or.email}" />
+						<button type="submit" class="btn input-group-addon cursor-pointer">
+							<i class="fa fa-search" aria-hidden="true"></i>
+						</button>
+					</div>
+				</div>
+			</form>
+
+			<div class="table-responsive">
+				<table class="table table-bordered table-striped">
+					<thead>
+						<tr>
+							<th class="text-left" th:text="#{label.username}"></th>
+							<th class="text-left" th:text="#{label.email}"></th>
+							<th class="text-center" th:text="#{label.active}"></th>
+							<th></th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr th:each="user : ${users}">
+							<td class="text-left" th:text="${user.username}"></td>
+							<td class="text-left" th:text="${user.email}"></td>
+							<td class="text-center" th:if="${user.active}"
+							    th:text="${user.active} ? #{label.yes} : #{label.no}"
+							    th:classappend="${user.active} ? 'text-success' : 'text-danger'"></td>
+
+							<td class="text-center">
+								<a class="btn btn-link btn-xs" href=""
+								   th:title="#{label.edit}" data-toggle="tooltip" data-placement="top">
+									<i class="fa fa-pencil" aria-hidden="true"></i>
+								</a>
+							</td>
+						</tr>
+
+						<tr th:if="${#lists.isEmpty(users)}">
+							<td colspan="4" th:text="#{message.no.users.found}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+	</section>
+
+</html>

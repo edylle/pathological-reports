@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+		<meta name="theme-color" content="#28a745" />
+
+		<title th:text="#{label.pathological.reports}"></title>
+
+		<link rel="stylesheet" type="text/css" th:href="@{/css/vendor/bootstrap.min.css}" />
+		<link rel="stylesheet" type="text/css" th:href="@{/css/font-awesome-4.7.0/css/font-awesome.min.css}"/>
+		<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+
+		<link rel="icon" th:href="@{/img/favicon.jpg}" type="image/ico" />
+	</head>
+
+	<body>
+
+		<script th:inline="javascript">
+			var navActive = [[${navActive}]];
+		</script>
+
+		<header layout:include="users/navbar-header"></header>
+
+		<section layout:fragment="content"></section>
+
+		<script th:src="@{/js/vendor/jquery-3.2.1.min.js}"></script>
+		<script th:src="@{/js/vendor/popper.min.js}"></script>
+		<script th:src="@{/js/vendor/bootstrap.min.js}"></script>
+		<script th:src="@{/js/main.js}"></script>
+
+	</body>
+
+</html>

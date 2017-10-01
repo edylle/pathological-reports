@@ -11,7 +11,7 @@ import com.edylle.pathologicalreports.utils.Messages;
 
 public enum RoleEnum {
 
-	ADMIN("role.admin.description", "/admin/home"),
+	ADMIN("role.admin.description", "/admin/find-users"),
 	PROFESSOR("role.professor.description", "/professor/home"),
 	STUDENT("role.student.description", "/student/home");
 
