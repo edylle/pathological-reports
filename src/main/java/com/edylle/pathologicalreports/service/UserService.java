@@ -1,5 +1,6 @@
 package com.edylle.pathologicalreports.service;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.util.StringUtils;
 
 import com.edylle.pathologicalreports.model.dto.FindUserDTO;
 import com.edylle.pathologicalreports.model.entity.User;
+import com.edylle.pathologicalreports.model.enumeration.RoleEnum;
 import com.edylle.pathologicalreports.repository.UserRepository;
 
 @Service
@@ -33,8 +35,14 @@ public class UserService {
 	}
 
 	public List<User> findBy(FindUserDTO dto) {
-		String roleStr = dto.getRole() == null ? "%%" : dto.getRole().name();
+		List<String> roleStr;
 		String usernameOrEmail;
+
+		if (dto.getRole() == null) {
+			roleStr = Arrays.asList(RoleEnum.PROFESSOR.name(), RoleEnum.STUDENT.name());
+		} else {
+			roleStr = Arrays.asList(dto.getRole().name());
+		}
 
 		if (StringUtils.isEmpty(dto.getUsernameOrEmail())) {
 			usernameOrEmail = "%%";

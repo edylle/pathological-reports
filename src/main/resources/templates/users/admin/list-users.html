@@ -11,7 +11,15 @@
 				<div layout:include="users/messages"></div>
 			</form>
 
-			<form method="get" th:action="@{/admin/find-users}" th:object="${user}">
+			<button class="btn cursor-pointer float-right">
+			  <span th:text="#{label.my.account}" style="margin-right: 8px;"></span> <i class="fa fa-user" aria-hidden="true"></i>
+			</button>
+			<br/><br/>
+
+			<h3 th:text="#{label.users}"></h3>
+ 			<hr style="margin-bottom: 30px;"/>
+
+			<form method="get" th:action="@{/admin/list-users}" th:object="${user}">
 				<div class="form-group">
 					<select class="custom-select" th:field="*{role}">
 						<option value="" class="select-option" th:text="'- ' + #{label.select.role} + ' -'" />
@@ -42,14 +50,14 @@
 
 					<tbody>
 						<tr th:each="user : ${users}">
-							<td class="text-left" th:text="${user.username}"></td>
-							<td class="text-left" th:text="${user.email}"></td>
-							<td class="text-center" th:if="${user.active}"
+							<td class="text-left align-middle" th:text="${user.username}"></td>
+							<td class="text-left align-middle" th:text="${user.email}"></td>
+							<td class="text-center align-middle" th:if="${user.active}"
 							    th:text="${user.active} ? #{label.yes} : #{label.no}"
 							    th:classappend="${user.active} ? 'text-success' : 'text-danger'"></td>
 
 							<td class="text-center">
-								<a class="btn btn-link btn-xs" href=""
+								<a class="btn btn-link btn-xs" th:href="@{/admin/user/{username}(username=${user.username})}"
 								   th:title="#{label.edit}" data-toggle="tooltip" data-placement="top">
 									<i class="fa fa-pencil" aria-hidden="true"></i>
 								</a>

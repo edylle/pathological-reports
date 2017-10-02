@@ -50,11 +50,11 @@ public class RecoverPasswordController {
 
 	@RequestMapping(value = "/redefine-password", method = RequestMethod.POST)
 	public ModelAndView redefinePassword(@ModelAttribute("password") @Validated PasswordVO password, Errors errors, RedirectAttributes attributes) {
-		ModelAndView mv = new ModelAndView();
-
 		if (errors.hasErrors()) {
 			return new ModelAndView("recover-password");
 		}
+
+		ModelAndView mv = new ModelAndView();
 
 		try {
 			recoverPasswordService.updatePassword(password, token);
