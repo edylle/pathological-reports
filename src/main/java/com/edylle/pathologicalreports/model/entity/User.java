@@ -2,6 +2,7 @@ package com.edylle.pathologicalreports.model.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -24,12 +25,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.edylle.pathologicalreports.model.enumeration.RoleEnum;
+import com.edylle.pathologicalreports.model.vo.UserVO;
 
 @Entity
 @Table(name = "USER")
 public class User implements Serializable {
 
-	private static final long serialVersionUID = 4373892410267495446L;
+	private static final long serialVersionUID = 8664494413480879313L;
 
 	@Id
 	@Column(name = "USERNAME", length = 32)
@@ -66,6 +68,17 @@ public class User implements Serializable {
 	public User() {
 		dateCreated = new Date();
 		active = true;
+	}
+
+	public User(UserVO vo) {
+		this();
+		username = vo.getUsername();
+		email = vo.getEmail();
+		phoneNumber = vo.getPhoneNumber();
+		password = vo.getPassword();
+		imageDir = vo.getImageDir();
+		roles = new HashSet<>();
+		roles.add(vo.getRole());
 	}
 
 	@Override

@@ -1,29 +1,71 @@
 package com.edylle.pathologicalreports.service;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
+import com.edylle.pathologicalreports.exception.CrudException;
 import com.edylle.pathologicalreports.model.dto.FindUserDTO;
 import com.edylle.pathologicalreports.model.entity.User;
 import com.edylle.pathologicalreports.model.enumeration.RoleEnum;
+import com.edylle.pathologicalreports.model.vo.UserVO;
 import com.edylle.pathologicalreports.repository.UserRepository;
+import com.edylle.pathologicalreports.utils.Messages;
 
 @Service
 public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private Messages messages;
 
-	public void update(User newUser) throws Exception {
-		User oldUser = userRepository.getOne(newUser.getUsername());
+	public User save(User user) throws Exception {
+		return userRepository.save(user);
+	}
 
-		// TODO turn oldUser into newUser
+	public User save(UserVO user) throws Exception {
+		Map<String, String> rejectedValues = new HashMap<>();
 
-		userRepository.save(oldUser);
+		// creating a new user
+		if (StringUtils.isEmpty(user.getFormerUsername())) {
+
+			if (findByUsername(user.getUsername()) != null) {
+				rejectedValues.put("username", messages.getMessageBy("message.param.duplicated", messages.getMessageBy("placeholder.username")));
+			}
+			if (findByEmail(user.getEmail()) != null) {
+				rejectedValues.put("email", messages.getMessageBy("message.param.duplicated", messages.getMessageBy("placeholder.email")));
+			}
+			if (StringUtils.isEmpty(user.getPassword())) {
+				rejectedValues.put("password", messages.getMessageBy("validation.field.required.password"));
+			}
+			if (StringUtils.isNotEmpty(user.getPassword()) && user.getPassword().trim().length() < 5 || user.getPassword().trim().length() > 16) {
+				rejectedValues.put("password", messages.getMessageBy("validation.length.password"));
+			}
+			if (StringUtils.isEmpty(user.getConfirmPassword())) {
+				rejectedValues.put("confirmPassword", messages.getMessageBy("validation.field.required.confirm.password"));
+			}
+			if (StringUtils.isNotEmpty(user.getPassword()) && StringUtils.isNotEmpty(user.getConfirmPassword())) {
+				if (!user.getPassword().equals(user.getConfirmPassword())) {
+					rejectedValues.put("password", messages.getMessageBy("message.passwords.dont.match"));
+				}
+			}
+			
+		// updating a previously created user
+		} else {
+
+		}
+
+		if (!rejectedValues.isEmpty()) {
+			throw new CrudException(rejectedValues);
+		}
+
+		return save(new User(user));
 	}
 
 	public User findByUsername(String username) {

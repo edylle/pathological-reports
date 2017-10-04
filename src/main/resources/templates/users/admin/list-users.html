@@ -11,13 +11,21 @@
 				<div layout:include="users/messages"></div>
 			</form>
 
-			<button class="btn cursor-pointer float-right">
-			  <span th:text="#{label.my.account}" style="margin-right: 8px;"></span> <i class="fa fa-user" aria-hidden="true"></i>
+			<button class="btn cursor-pointer float-right" style="margin-top: -5px;">
+			  <span th:text="#{label.my.account}" style="margin-right: 8px;"></span>
+			  <i class="fa fa-user" aria-hidden="true"></i>
 			</button>
 			<br/><br/>
 
-			<h3 th:text="#{label.users}"></h3>
- 			<hr style="margin-bottom: 30px;"/>
+			<div class="clearfix">
+				<h3 th:text="#{label.users}" class="float-left"></h3>
+				<a class="btn btn-link cursor-pointer float-right border rounded text-success"
+				        th:title="#{label.new.user}" data-toggle="tooltip" data-placement="left" th:href="@{/admin/new-user}">
+				  <i class="fa fa-plus" aria-hidden="true"></i>
+				</a>
+ 			</div>
+
+	 		<hr style="margin-bottom: 30px;"/>
 
 			<form method="get" th:action="@{/admin/list-users}" th:object="${user}">
 				<div class="form-group">
@@ -43,6 +51,7 @@
 						<tr>
 							<th class="text-left" th:text="#{label.username}"></th>
 							<th class="text-left" th:text="#{label.email}"></th>
+							<th class="text-left" th:text="#{label.role}"></th>
 							<th class="text-center" th:text="#{label.active}"></th>
 							<th></th>
 						</tr>
@@ -52,6 +61,7 @@
 						<tr th:each="user : ${users}">
 							<td class="text-left align-middle" th:text="${user.username}"></td>
 							<td class="text-left align-middle" th:text="${user.email}"></td>
+							<td class="text-left align-middle" th:text="${user.roles.iterator().next().getDescription()}"></td>
 							<td class="text-center align-middle" th:if="${user.active}"
 							    th:text="${user.active} ? #{label.yes} : #{label.no}"
 							    th:classappend="${user.active} ? 'text-success' : 'text-danger'"></td>

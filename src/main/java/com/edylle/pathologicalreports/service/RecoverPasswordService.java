@@ -68,10 +68,10 @@ public class RecoverPasswordService {
 			throw new TokenException(messages.getMessageBy("message.token.exception"));
 		}
 
-		User usuario = recoverPassword.getUser();
-		usuario.setPassword(vo.getPassword());
+		User user = recoverPassword.getUser();
+		user.setPassword(vo.getPassword());
 
-		userService.update(usuario);
+		userService.save(user);
 		delete(recoverPassword);
 	}
 
