@@ -31,7 +31,7 @@ import com.edylle.pathologicalreports.model.vo.UserVO;
 @Table(name = "USER")
 public class User implements Serializable {
 
-	private static final long serialVersionUID = 8664494413480879313L;
+	private static final long serialVersionUID = -1628287385114448495L;
 
 	@Id
 	@Column(name = "USERNAME", length = 32)
@@ -47,8 +47,8 @@ public class User implements Serializable {
 	@Column(name = "PASSWORD", length = 80, nullable = false)
 	private String password;
 
-	@Column(name = "IMAGE_DIR", length = 255)
-	private String imageDir;
+	@Column(name = "IMAGE_PATH", length = 255)
+	private String imagePath;
 
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "DATE_CREATED", nullable = false)
@@ -75,8 +75,8 @@ public class User implements Serializable {
 		username = vo.getUsername();
 		email = vo.getEmail();
 		phoneNumber = vo.getPhoneNumber();
-		password = vo.getPassword();
-		imageDir = vo.getImageDir();
+		setPassword(vo.getPassword());
+		imagePath = vo.getImagePath();
 		roles = new HashSet<>();
 		roles.add(vo.getRole());
 	}
@@ -139,12 +139,12 @@ public class User implements Serializable {
 		this.password = new BCryptPasswordEncoder().encode(password);
 	}
 
-	public String getImageDir() {
-		return imageDir;
+	public String getImagePath() {
+		return imagePath;
 	}
 
-	public void setImageDir(String imageDir) {
-		this.imageDir = imageDir;
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
 
 	public Date getDateCreated() {

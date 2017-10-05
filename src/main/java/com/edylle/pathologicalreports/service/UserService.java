@@ -8,13 +8,16 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.edylle.pathologicalreports.exception.CrudException;
 import com.edylle.pathologicalreports.model.dto.FindUserDTO;
 import com.edylle.pathologicalreports.model.entity.User;
 import com.edylle.pathologicalreports.model.enumeration.RoleEnum;
 import com.edylle.pathologicalreports.model.vo.UserVO;
+import com.edylle.pathologicalreports.properties.ImagePathProperties;
 import com.edylle.pathologicalreports.repository.UserRepository;
+import com.edylle.pathologicalreports.utils.FilesUtils;
 import com.edylle.pathologicalreports.utils.Messages;
 
 @Service
@@ -23,17 +26,19 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
+	private ImagePathProperties imagePathProperties;
+	@Autowired
 	private Messages messages;
 
 	public User save(User user) throws Exception {
 		return userRepository.save(user);
 	}
 
-	public User save(UserVO user) throws Exception {
+	public User save(UserVO user, MultipartFile imageFile) throws Exception {
 		Map<String, String> rejectedValues = new HashMap<>();
 
 		// creating a new user
-		if (StringUtils.isEmpty(user.getFormerUsername())) {
+		if (user.isNewUser()) {
 
 			if (findByUsername(user.getUsername()) != null) {
 				rejectedValues.put("username", messages.getMessageBy("message.param.duplicated", messages.getMessageBy("placeholder.username")));
@@ -63,6 +68,10 @@ public class UserService {
 
 		if (!rejectedValues.isEmpty()) {
 			throw new CrudException(rejectedValues);
+		}
+
+		if (imageFile != null && !imageFile.isEmpty()) {
+			user.setImagePath(FilesUtils.saveImage(imagePathProperties.getUserContext(), imagePathProperties.getUsersPath(), imageFile));
 		}
 
 		return save(new User(user));

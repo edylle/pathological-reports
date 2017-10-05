@@ -19,7 +19,7 @@
 
 			<div class="clearfix">
 				<h3 th:text="#{label.users}" class="float-left"></h3>
-				<a class="btn btn-link cursor-pointer float-right border rounded text-success"
+				<a class="btn btn-success cursor-pointer float-right border rounded"
 				        th:title="#{label.new.user}" data-toggle="tooltip" data-placement="left" th:href="@{/admin/new-user}">
 				  <i class="fa fa-plus" aria-hidden="true"></i>
 				</a>
@@ -75,7 +75,7 @@
 						</tr>
 
 						<tr th:if="${#lists.isEmpty(users)}">
-							<td colspan="4" th:text="#{message.no.users.found}"></td>
+							<td colspan="5" th:text="#{message.no.users.found}"></td>
 						</tr>
 					</tbody>
 				</table>

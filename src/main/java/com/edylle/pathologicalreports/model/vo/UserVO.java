@@ -13,9 +13,9 @@ import com.edylle.pathologicalreports.model.enumeration.RoleEnum;
 
 public class UserVO implements Serializable {
 
-	private static final long serialVersionUID = -5151744727802162300L;
+	private static final long serialVersionUID = -2959401146028248414L;
 
-	private String formerUsername;
+	private boolean isNewUser;
 
 	@NotEmpty(message = "{validation.field.required.username}")
 	@Size(max = 32, message = "{validation.length.username}")
@@ -32,31 +32,35 @@ public class UserVO implements Serializable {
 
 	private String password;
 	private String confirmPassword;
-	private String imageDir;
+	private String imagePath;
 
 	@NotNull(message = "{validation.field.required.role}")
 	private RoleEnum role;
 
 	public UserVO() {
-
+		isNewUser = true;
 	}
 
-	public UserVO(User user) {
-		formerUsername = user.getUsername();
+	public UserVO(boolean isNewUser) {
+		this.isNewUser = isNewUser;
+	}
+
+	public UserVO(User user, boolean isNewUser) {
+		this.isNewUser = isNewUser;
 		username = user.getUsername();
 		email = user.getEmail();
 		phoneNumber = user.getPhoneNumber();
-		imageDir = user.getImageDir();
+		imagePath = user.getImagePath();
 		role = user.getRoles().iterator().next(); // this project has only on role per user
 	}
 
 	// GETTERS AND SETTERSFs
-	public String getFormerUsername() {
-		return formerUsername;
+	public boolean isNewUser() {
+		return isNewUser;
 	}
 
-	public void setFormerUsername(String formerUsername) {
-		this.formerUsername = formerUsername;
+	public void setNewUser(boolean isNewUser) {
+		this.isNewUser = isNewUser;
 	}
 
 	public String getUsername() {
@@ -99,12 +103,12 @@ public class UserVO implements Serializable {
 		this.confirmPassword = confirmPassword;
 	}
 
-	public String getImageDir() {
-		return imageDir;
+	public String getImagePath() {
+		return imagePath;
 	}
 
-	public void setImageDir(String imageDir) {
-		this.imageDir = imageDir;
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
 
 	public RoleEnum getRole() {

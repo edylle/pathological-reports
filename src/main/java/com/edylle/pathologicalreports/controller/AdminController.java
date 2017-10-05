@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.edylle.pathologicalreports.exception.CrudException;
+import com.edylle.pathologicalreports.exception.ImageFormatException;
 import com.edylle.pathologicalreports.model.constant.NavIds;
 import com.edylle.pathologicalreports.model.dto.FindUserDTO;
 import com.edylle.pathologicalreports.model.entity.User;
@@ -61,21 +63,27 @@ public class AdminController {
 	public ModelAndView newUser() {
 		ModelAndView mv = new ModelAndView("users/admin/new-user");
 		mv.addObject("navActive", NavIds.getInstance().getUsersAdmin());
-		mv.addObject("user", new UserVO());
+		mv.addObject("user", new UserVO(true));
 
 		return mv;
 	}
 
 	@RequestMapping(value = "/new-user", method = RequestMethod.POST)
-	public String newUserPost(Model model, @ModelAttribute("user") @Validated UserVO user, Errors errors, RedirectAttributes attributes) {
+	public String newUserPost(Model model, @ModelAttribute("user") @Validated UserVO user, Errors errors, RedirectAttributes attributes, @RequestParam("imagem") MultipartFile imageFile) {
 		try {
 			if (errors.hasErrors()) {
 				return "users/admin/new-user";
 			}
 
-			userService.save(user);
+			userService.save(user, imageFile);
 
 			attributes.addFlashAttribute("successMessage", messages.getMessageBy("message.param.created", messages.getMessageBy("label.user")));
+
+		} catch (ImageFormatException e) {
+			model.addAttribute("navActive", NavIds.getInstance().getUsersAdmin());
+			attributes.addFlashAttribute("errorMessage", messages.getMessageBy("message.invalid.image.format"));
+
+			return "users/admin/new-user";
 
 		} catch (CrudException e) {
 			for (Map.Entry<String, String> entry : e.getRejectedValues().entrySet()) {
