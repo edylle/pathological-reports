@@ -46,7 +46,7 @@
 			</form>
 
 			<div class="table-responsive">
-				<table class="table table-bordered table-striped">
+				<table class="table table-bordered table-striped table-hover">
 					<thead>
 						<tr>
 							<th class="text-left" th:text="#{label.username}"></th>
@@ -67,7 +67,7 @@
 							    th:classappend="${user.active} ? 'text-success' : 'text-danger'"></td>
 
 							<td class="text-center">
-								<a class="btn btn-link btn-xs" th:href="@{/admin/user/{username}(username=${user.username})}"
+								<a th:href="@{/admin/user/{username}(username=${user.username})}"
 								   th:title="#{label.edit}" data-toggle="tooltip" data-placement="top">
 									<i class="fa fa-pencil" aria-hidden="true"></i>
 								</a>

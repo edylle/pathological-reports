@@ -69,7 +69,7 @@ public class AdminController {
 	}
 
 	@RequestMapping(value = "/new-user", method = RequestMethod.POST)
-	public String newUserPost(Model model, @ModelAttribute("user") @Validated UserVO user, Errors errors, RedirectAttributes attributes, @RequestParam("imagem") MultipartFile imageFile) {
+	public String newUserPost(Model model, @ModelAttribute("user") @Validated UserVO user, Errors errors, RedirectAttributes attributes, @RequestParam("image") MultipartFile imageFile) {
 		try {
 			if (errors.hasErrors()) {
 				return "users/admin/new-user";

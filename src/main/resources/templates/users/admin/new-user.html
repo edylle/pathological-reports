@@ -4,6 +4,14 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorator="users/layout">
 
+	<head>
+		<style th:inline="text">
+			.label-inputfile {
+				background-image: url([[@{/img/user-icon.png}]]);
+			}
+		</style>
+	</head>
+
 	<section layout:fragment="content">
 	
 		<div class="container container-content">
@@ -71,21 +79,14 @@
 					    <small id="phoneHelp" class="form-text text-muted" th:text="#{message.never.share.phone.number}"></small>
 					</div>
 				</div>
-				
+
 				<div class="form-group row">
-					<label class="custom-file">
-					  <input id="input-imagem" type="file" name="imagem" accept="image/*"/>
-					  <span class="custom-file-control"></span>
+					<input id="input-image" class="inputfile" type="file" name="image" accept="image/*" aria-describedby="imageHelp" />
+					<label id="id-label-inputfile" for="input-image" class="label-inputfile cursor-pointer rounded-circle">
+						<span class="span-text-img-file" th:text="#{label.photo}"></span>
 					</label>
 				</div>
-				
-				<div class="form-group row">
-				
-				</div>
-					<label class="col-sm-2 col-form-label">Foto escolhida</label>
-					<div class="col-sm-4">
-						<img  id="show-imagem"  ></img>
-					</div>
+
 				<br />
 
 				<div class="row">
