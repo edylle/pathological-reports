@@ -11,11 +11,11 @@
 				<div layout:include="users/messages"></div>
 			</form>
 
-			<button class="btn cursor-pointer float-right" style="margin-top: -5px;">
-			  <span th:text="#{label.my.account}" style="margin-right: 8px;"></span>
-			  <i class="fa fa-user" aria-hidden="true"></i>
-			</button>
-			<br/><br/>
+			<img th:src="${#httpServletRequest.getContextPath()} + ${loggedImage}" width="60" height="60"
+			     class="rounded-circle float-right cursor-pointer img-my-account" style="margin-top: -5px;"
+			     th:title="#{label.my.account}" data-toggle="tooltip" data-placement="left" />
+
+			<br/><br/><br/>
 
 			<div class="clearfix">
 				<h3 th:text="#{label.users}" class="float-left"></h3>

@@ -22,6 +22,20 @@
 				<div layout:include="users/validation-messages"></div>
 
 				<div class="form-group row">
+					<div class="col-sm-10 ml-sm-auto">
+						<input id="input-image" class="inputfile" type="file" name="image" accept="image/*"  />
+
+						<label id="id-label-inputfile" for="input-image" class="label-inputfile cursor-pointer rounded-circle" aria-describedby="imageHelp">
+							<span class="span-text-img-file" th:text="#{label.photo}"></span>
+						</label>
+
+						<small id="imageHelp" class="form-text text-muted" th:text="#{message.max.size.image}"></small>
+						<small id="imageHelp-invalid" class="form-text text-muted display-none" th:text="#{message.max.size.image.invalid}"></small>
+						<small id="imageHelp-error" class="form-text text-muted display-none" th:text="#{message.image.error}"></small>
+					</div>
+				</div>
+
+				<div class="form-group row">
 					<label for="role" class="col-sm-2 col-form-label" th:text="#{label.role}"></label>
 					<div class="col-sm-4">
 						<select id="role" class="custom-select" th:field="*{role}" required="required"
@@ -80,16 +94,9 @@
 					</div>
 				</div>
 
-				<div class="form-group row">
-					<input id="input-image" class="inputfile" type="file" name="image" accept="image/*" aria-describedby="imageHelp" />
-					<label id="id-label-inputfile" for="input-image" class="label-inputfile cursor-pointer rounded-circle">
-						<span class="span-text-img-file" th:text="#{label.photo}"></span>
-					</label>
-				</div>
-
 				<br />
 
-				<div class="row">
+				<div class="form-group row">
 					<div class="col-sm-10 ml-sm-auto">
 						<button type="submit" class="btn btn-success cursor-pointer" th:text="#{label.submit}" style="margin-right: 8px;"></button>
 						<button type="button" class="btn btn-danger cursor-pointer" th:text="#{label.cancel}"

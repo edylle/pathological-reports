@@ -9,10 +9,10 @@
 
 			if (!isFileSizeAllowed(files, 0.999)) {
 				takePicture.value = "";
-				$("#id-label-inputfile").css("background-image", "url(" + "reports/" + "/img/user-icon.png" + ")");
+				$("#id-label-inputfile").css("background-image", "url(" + contextPath + "/img/user-icon.png" + ")");
 				$("#imageHelp-error").hide();
 				$("#imageHelp").hide();
-				$("#imageHelp-invalid").show();
+				$("#imageHelp-invalid").css("display", "block");
 				return;
 			}
 
@@ -42,7 +42,7 @@
 						fileReader.readAsDataURL(file);
 					} catch (e) {
 						// Display error message
-						$("#imageHelp-error").show();
+						$("#imageHelp-error").css("display", "block");
 					}
 				}
 			}

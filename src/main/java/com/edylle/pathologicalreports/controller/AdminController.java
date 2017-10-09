@@ -56,6 +56,9 @@ public class AdminController {
 		mv.addObject("users", userService.findBy(user));
 		mv.addObject("warnMessage", warnMessage);
 
+		mv.addObject("loggedUsername", UserUtils.getUser().getUsername());
+		mv.addObject("loggedImage", userService.findByUsername(UserUtils.getUser().getUsername()).getImagePath()); // get updated image
+
 		return mv;
 	}
 

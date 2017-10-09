@@ -6,13 +6,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.edylle.pathologicalreports.exception.ImageFormatException;
 
 public final class FilesUtils {
 
-	public static String saveImage(String context, String path, MultipartFile file) throws ImageFormatException, IOException {
+	public static String saveImage(String context, String path, MultipartFile file, String username) throws ImageFormatException, IOException {
 		if (file == null || file.isEmpty()) {
 			return null;
 		}
@@ -21,7 +22,13 @@ public final class FilesUtils {
 		}
 
 		String extension = getExtensionFrom(file);
-		String fileName = addUnderlinesBetweenWords(extension, file.getOriginalFilename().split("\\.")[0]);
+		String fileName;
+
+		if (StringUtils.isEmpty(username)) {
+			fileName = addUnderlinesBetweenWords(extension, file.getOriginalFilename().split("\\.")[0]);
+		} else {
+			fileName = username;
+		}
 
 		BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(Paths.get(path, fileName).toString().toLowerCase())));
 		stream.write(file.getBytes());

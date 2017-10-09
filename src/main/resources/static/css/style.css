@@ -18,6 +18,11 @@
 	display: none;
 }
 
+.img-my-account {
+	box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.2);
+	border: 3px solid rgb(100, 100, 100);
+}
+
 .inputfile {
 	width: 0.1px;
 	height: 0.1px;
@@ -29,16 +34,16 @@
 
 .label-inputfile {
 	font-size: 1.25em;
-    font-weight: 700;
-    color: white;
-    display: inline-block;
-    width: 100px;
-    height: 100px;
+	font-weight: 700;
+	color: white;
+	display: inline-block;
+	width: 100px;
+	height: 100px;
 	background-repeat: no-repeat;
 	background-size: contain;
 	border: 4px solid rgb(100, 100, 100);
 	text-align: center;
-	padding-top: 85px;
+	padding-top: 75px;
 	transition: padding-top 0.8s ease;
 }
 
@@ -50,8 +55,8 @@
 .label-inputfile:focus, .label-inputfile:hover {
 	opacity: 0.8;
 	padding-top: 55px;
-    transition: opacity 1s ease;
-    transition: padding-top 0.3s ease;
+	transition: opacity 1s ease;
+	transition: padding-top 0.3s ease;
 }
 
 .label-inputfile:hover .span-text-img-file {

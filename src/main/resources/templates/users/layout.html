@@ -21,6 +21,7 @@
 
 		<script th:inline="javascript">
 			var navActive = [[${navActive}]];
+			var contextPath = [[${#httpServletRequest.getContextPath()}]];
 		</script>
 
 		<header layout:include="users/navbar-header"></header>

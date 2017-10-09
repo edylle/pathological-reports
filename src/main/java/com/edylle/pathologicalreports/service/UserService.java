@@ -71,7 +71,7 @@ public class UserService {
 		}
 
 		if (imageFile != null && !imageFile.isEmpty()) {
-			user.setImagePath(FilesUtils.saveImage(imagePathProperties.getUserContext(), imagePathProperties.getUsersPath(), imageFile));
+			user.setImagePath(FilesUtils.saveImage(imagePathProperties.getUserContext(), imagePathProperties.getUsersPath(), imageFile, user.getUsername()));
 		}
 
 		return save(new User(user));
