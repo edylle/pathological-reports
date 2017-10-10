@@ -60,10 +60,18 @@ public class UserService {
 					rejectedValues.put("password", messages.getMessageBy("message.passwords.dont.match"));
 				}
 			}
-			
+
 		// updating a previously created user
 		} else {
-
+			User userEmail = findByEmail(user.getEmail());
+			if (userEmail != null && !userEmail.getUsername().equalsIgnoreCase(user.getUsername())) {
+				rejectedValues.put("email", messages.getMessageBy("message.param.duplicated", messages.getMessageBy("placeholder.email")));
+			}
+			if (StringUtils.isNotEmpty(user.getPassword()) || StringUtils.isNotEmpty(user.getConfirmPassword())) {
+				if (!user.getPassword().equals(user.getConfirmPassword())) {
+					rejectedValues.put("password", messages.getMessageBy("message.passwords.dont.match"));
+				}
+			}
 		}
 
 		if (!rejectedValues.isEmpty()) {

@@ -75,6 +75,7 @@ public class AdminController {
 	public String newUserPost(Model model, @ModelAttribute("user") @Validated UserVO user, Errors errors, RedirectAttributes attributes, @RequestParam("image") MultipartFile imageFile) {
 		try {
 			if (errors.hasErrors()) {
+				model.addAttribute("navActive", NavIds.getInstance().getUsersAdmin());
 				return "users/admin/new-user";
 			}
 
@@ -108,7 +109,7 @@ public class AdminController {
 	}
 
 	@RequestMapping(value = "/user/{username}")
-	public ModelAndView editUser(@PathVariable("username") User user) {
+	public ModelAndView viewUser(@PathVariable("username") User user) {
 		ModelAndView mv = new ModelAndView();
 
 		if (user == null) {
@@ -124,8 +125,9 @@ public class AdminController {
 			return mv;
 		}
 
-		mv.setViewName("users/admin/list-users");
-		mv.addObject(user);
+		mv.addObject("navActive", NavIds.getInstance().getUsersAdmin());
+		mv.setViewName("users/admin/new-user");
+		mv.addObject("user", new UserVO(user, false));
 
 		return mv;
 	}

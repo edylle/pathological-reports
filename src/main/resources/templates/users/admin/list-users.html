@@ -11,9 +11,11 @@
 				<div layout:include="users/messages"></div>
 			</form>
 
-			<img th:src="${#httpServletRequest.getContextPath()} + ${loggedImage}" width="60" height="60"
-			     class="rounded-circle float-right cursor-pointer img-my-account" style="margin-top: -5px;"
-			     th:title="#{label.my.account}" data-toggle="tooltip" data-placement="left" />
+			<a th:href="@{/admin/user/{username}(username=${loggedUsername})}">
+				<img th:src="${#strings.isEmpty(loggedImage)} ? @{/img/user-icon.png} : ${#httpServletRequest.getContextPath()} + ${loggedImage}" width="60" height="60"
+				     class="rounded-circle float-right cursor-pointer img-my-account" style="margin-top: -5px;"
+				     th:title="#{label.my.account}" data-toggle="tooltip" data-placement="left" />
+			</a>
 
 			<br/><br/><br/>
 
@@ -38,7 +40,8 @@
 				<div class="form-group">
 				 	<div class="input-group mb-2 mb-sm-0">
 						<input type="text" class="form-control" th:field="*{usernameOrEmail}" th:placeholder="#{placeholder.username.or.email}" />
-						<button type="submit" class="btn input-group-addon cursor-pointer">
+						<button type="submit" class="btn input-group-addon cursor-pointer"
+						        th:title="#{label.search}" data-toggle="tooltip" data-placement="top">
 							<i class="fa fa-search" aria-hidden="true"></i>
 						</button>
 					</div>
@@ -50,9 +53,9 @@
 					<thead>
 						<tr>
 							<th class="text-left" th:text="#{label.username}"></th>
-							<th class="text-left" th:text="#{label.email}"></th>
-							<th class="text-left" th:text="#{label.role}"></th>
-							<th class="text-center" th:text="#{label.active}"></th>
+							<th class="text-left hidden-sm-down" th:text="#{label.email}"></th>
+							<th class="text-left hidden-sm-down" th:text="#{label.role}"></th>
+							<th class="text-center hidden-sm-down" th:text="#{label.active}"></th>
 							<th></th>
 						</tr>
 					</thead>
@@ -60,16 +63,16 @@
 					<tbody>
 						<tr th:each="user : ${users}">
 							<td class="text-left align-middle" th:text="${user.username}"></td>
-							<td class="text-left align-middle" th:text="${user.email}"></td>
-							<td class="text-left align-middle" th:text="${user.roles.iterator().next().getDescription()}"></td>
-							<td class="text-center align-middle" th:if="${user.active}"
+							<td class="text-left align-middle hidden-sm-down" th:text="${user.email}"></td>
+							<td class="text-left align-middle hidden-sm-down" th:text="${user.roles.iterator().next().getDescription()}"></td>
+							<td class="text-center align-middle hidden-sm-down" th:if="${user.active}"
 							    th:text="${user.active} ? #{label.yes} : #{label.no}"
 							    th:classappend="${user.active} ? 'text-success' : 'text-danger'"></td>
 
 							<td class="text-center">
 								<a th:href="@{/admin/user/{username}(username=${user.username})}"
-								   th:title="#{label.edit}" data-toggle="tooltip" data-placement="top">
-									<i class="fa fa-pencil" aria-hidden="true"></i>
+								   th:title="#{label.view}" data-toggle="tooltip" data-placement="top">
+									<i class="fa fa-eye" aria-hidden="true"></i>
 								</a>
 							</td>
 						</tr>

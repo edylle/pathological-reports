@@ -4,42 +4,41 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorator="users/layout">
 
-	<head>
-		<style th:inline="text">
-			.label-inputfile {
-				background-image: url([[@{/img/user-icon.png}]]);
-			}
-		</style>
-	</head>
-
 	<section layout:fragment="content">
-	
+
 		<div class="container container-content">
 
 			<form enctype="multipart/form-data" method="post" th:action="@{/admin/new-user}" th:object="${user}">
 
+				<input type="hidden" th:field="*{username}" th:if="!${user.newUser}" />
+				<input type="hidden" th:field="*{role}" th:if="${user.role eq T(com.edylle.pathologicalreports.model.enumeration.RoleEnum).ADMIN}" />
+				<input type="hidden" th:field="*{newUser}" />
+				<input type="hidden" th:field="*{imagePath}" />
+
 				<div layout:include="users/messages"></div>
 				<div layout:include="users/validation-messages"></div>
 
-				<div class="form-group row">
-					<div class="col-sm-10 ml-sm-auto">
-						<input id="input-image" class="inputfile" type="file" name="image" accept="image/*"  />
+				<div class="form-group row" style="text-align: center;">
+					<div class="mx-auto">
+						<input id="input-image" class="inputfile js-disabled" type="file" name="image" accept="image/*" th:disabled="!${user.newUser}"/>
 
-						<label id="id-label-inputfile" for="input-image" class="label-inputfile cursor-pointer rounded-circle" aria-describedby="imageHelp">
+						<label id="id-label-inputfile" for="input-image" class="label-inputfile cursor-pointer rounded-circle" aria-describedby="imageHelp"
+						       th:style="${#strings.isEmpty(user.imagePath)} ? 'background-image: url(' +  @{/img/user-icon.png} + ')' : 'background-image: url(' + ${#httpServletRequest.getContextPath()} + ${user.imagePath} + ')'">
 							<span class="span-text-img-file" th:text="#{label.photo}"></span>
 						</label>
 
-						<small id="imageHelp" class="form-text text-muted" th:text="#{message.max.size.image}"></small>
+						<small id="imageHelp" class="form-text text-muted" th:text="#{message.max.size.image}" th:if="${user.newUser}"></small>
 						<small id="imageHelp-invalid" class="form-text text-muted display-none" th:text="#{message.max.size.image.invalid}"></small>
 						<small id="imageHelp-error" class="form-text text-muted display-none" th:text="#{message.image.error}"></small>
 					</div>
 				</div>
 
-				<div class="form-group row">
-					<label for="role" class="col-sm-2 col-form-label" th:text="#{label.role}"></label>
+				<div class="form-group row" th:if="${user.role ne T(com.edylle.pathologicalreports.model.enumeration.RoleEnum).ADMIN}">
+					<div class="col-md-3"></div>
+					<label for="role" class="col-sm-2 col-form-label custom-label-alignment" th:text="#{label.role}"></label>
 					<div class="col-sm-4">
-						<select id="role" class="custom-select" th:field="*{role}" required="required"
-						        th:classappend="${#fields.hasErrors('role')} ? is-invalid">
+						<select id="role" class="custom-select js-disabled" th:field="*{role}" required="required"
+						        th:classappend="${#fields.hasErrors('role')} ? is-invalid" th:disabled="!${user.newUser}">
 							<option value="" class="select-option" th:text="'- ' + #{label.select.role} + ' -'" />
 							<option th:each="role : ${getRoles}" th:value="${role}" th:text="${role.description}" />
 						</select>
@@ -47,59 +46,78 @@
 				</div>
 
 				<div class="form-group row">
-					<label for="username" class="col-sm-2 col-form-label" th:text="#{label.username}"></label>
+					<div class="col-md-3"></div>
+					<label for="username" class="col-sm-2 col-form-label custom-label-alignment" th:text="#{label.username}"></label>
 					<div class="col-sm-4">
 						<input type="text" class="form-control text-lowercase" id="username" th:field="*{username}"
 					           maxlength="32" th:placeholder="#{placeholder.username}" required="required"
 					           th:classappend="${#fields.hasErrors('username')} ? is-invalid"
-					           th:disabled="${isNewUser}"  />
+					           th:disabled="!${user.newUser}"  />
+					</div>
+				</div>
+
+				<div class="js-password-new" th:classappend="!${user.newUser} ? display-none">
+					<div class="form-group row">
+						<div class="col-md-3"></div>
+						<label for="password" class="col-sm-2 col-form-label custom-label-alignment" th:text="#{label.password}"></label>
+						<div class="col-sm-4">
+							<input type="password" class="form-control js-disabled" id="password" th:field="*{password}"
+						           maxlength="16" th:placeholder="#{placeholder.password}"
+						           th:classappend="${#fields.hasErrors('password')} ? is-invalid"
+						           th:disabled="!${user.newUser}" />
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<div class="col-md-3"></div>
+						<label for="confirm-password" class="col-sm-2 col-form-label custom-label-alignment" th:text="#{label.confirm.password}"></label>
+						<div class="col-sm-4">
+							<input type="password" class="form-control js-disabled" id="confirm-password" th:field="*{confirmPassword}"
+						           maxlength="16" th:placeholder="#{placeholder.confirm.new.password}"
+						           th:classappend="${#fields.hasErrors('confirmPassword')} ? is-invalid"
+						           th:disabled="!${user.newUser}" />
+						</div>
 					</div>
 				</div>
 
 				<div class="form-group row">
-					<label for="password" class="col-sm-2 col-form-label" th:text="#{label.password}"></label>
+					<div class="col-md-3"></div>
+					<label for="email" class="col-sm-2 col-form-label custom-label-alignment" th:text="#{label.email}"></label>
 					<div class="col-sm-4">
-						<input type="password" class="form-control" id="password" th:field="*{password}"
-					           maxlength="16" th:placeholder="#{placeholder.password}"
-					           th:classappend="${#fields.hasErrors('password')} ? is-invalid" />
-					</div>
-				</div>
-
-				<div class="form-group row">
-					<label for="confirm-password" class="col-sm-2 col-form-label" th:text="#{label.confirm.password}"></label>
-					<div class="col-sm-4">
-						<input type="password" class="form-control" id="confirm-password" th:field="*{confirmPassword}"
-					           maxlength="16" th:placeholder="#{placeholder.confirm.new.password}"
-					           th:classappend="${#fields.hasErrors('confirmPassword')} ? is-invalid" />
-					</div>
-				</div>
-
-				<div class="form-group row">
-					<label for="email" class="col-sm-2 col-form-label" th:text="#{label.email}"></label>
-					<div class="col-sm-4">
-						<input type="email" class="form-control" id="email" th:field="*{email}" aria-describedby="emailHelp"
+						<input type="email" class="form-control js-disabled" id="email" th:field="*{email}" aria-describedby="emailHelp"
 					           maxlength="128" th:placeholder="#{placeholder.email}" required="required"
-					           th:classappend="${#fields.hasErrors('email')} ? is-invalid" />
+					           th:classappend="${#fields.hasErrors('email')} ? is-invalid" th:disabled="!${user.newUser}" />
 					    <small id="emailHelp" class="form-text text-muted" th:text="#{message.never.share.email}"></small>
 					</div>
 				</div>
 
 				<div class="form-group row">
-					<label for="phone" class="col-sm-2 col-form-label" th:text="#{label.phone.number}"></label>
+					<div class="col-md-3"></div>
+					<label for="phone" class="col-sm-2 col-form-label custom-label-alignment" th:text="#{label.phone.number}"></label>
 					<div class="col-sm-4">
-						<input type="text" class="form-control" id="phone" th:field="*{phoneNumber}" aria-describedby="phoneHelp"
+						<input type="text" class="form-control js-disabled" id="phone" th:field="*{phoneNumber}" aria-describedby="phoneHelp"
 					           maxlength="16" th:placeholder="#{placeholder.phone.number}" required="required"
-					           th:classappend="${#fields.hasErrors('phoneNumber')} ? is-invalid" />
+					           th:classappend="${#fields.hasErrors('phoneNumber')} ? is-invalid" th:disabled="!${user.newUser}" />
 					    <small id="phoneHelp" class="form-text text-muted" th:text="#{message.never.share.phone.number}"></small>
 					</div>
 				</div>
 
 				<br />
 
-				<div class="form-group row">
-					<div class="col-sm-10 ml-sm-auto">
-						<button type="submit" class="btn btn-success cursor-pointer" th:text="#{label.submit}" style="margin-right: 8px;"></button>
-						<button type="button" class="btn btn-danger cursor-pointer" th:text="#{label.cancel}"
+				<div class="form-group row" style="text-align: center;">
+					<div class="mx-auto">
+						<button type="submit" class="btn btn-success cursor-pointer js-btn-new" th:classappend="!${user.newUser} ? display-none"
+						        th:text="#{label.submit}" style="margin-right: 8px;"></button>
+
+						<button type="button" class="btn btn-primary cursor-pointer js-btn-view"
+						        th:text="#{label.edit}" style="margin-right: 8px;" th:if="!${user.newUser}" onclick="enableFields()"></button>
+
+						<button type="button" class="btn btn-danger cursor-pointer js-btn-new" th:classappend="!${user.newUser} ? display-none"
+						        th:text="#{label.cancel}"
+						        th:onclick="'window.location.href = \'' + @{/admin/list-users} + '\''"></button>
+
+						<button type="button" class="btn btn-danger cursor-pointer js-btn-view"
+						        th:text="#{label.go.back}" th:if="!${user.newUser}"
 						        th:onclick="'window.location.href = \'' + @{/admin/list-users} + '\''"></button>
 					</div>
 				</div>
