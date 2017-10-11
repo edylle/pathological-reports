@@ -1,5 +1,6 @@
 $(function() {
 	$('[data-toggle="tooltip"]').tooltip();
+	$('[rel="tooltip"]').tooltip();
 	$("#" + navActive).addClass("active");
 });
 

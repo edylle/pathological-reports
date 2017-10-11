@@ -13,7 +13,7 @@
 
 			<a th:href="@{/admin/user/{username}(username=${loggedUsername})}">
 				<img th:src="${#strings.isEmpty(loggedImage)} ? @{/img/user-icon.png} : ${#httpServletRequest.getContextPath()} + ${loggedImage}" width="60" height="60"
-				     class="rounded-circle float-right cursor-pointer img-my-account" style="margin-top: -5px;"
+				     class="rounded-circle float-right img-my-account" style="margin-top: -5px;"
 				     th:title="#{label.my.account}" data-toggle="tooltip" data-placement="left" />
 			</a>
 
@@ -65,14 +65,29 @@
 							<td class="text-left align-middle" th:text="${user.username}"></td>
 							<td class="text-left align-middle hidden-sm-down" th:text="${user.email}"></td>
 							<td class="text-left align-middle hidden-sm-down" th:text="${user.roles.iterator().next().getDescription()}"></td>
-							<td class="text-center align-middle hidden-sm-down" th:if="${user.active}"
+							<td class="text-center align-middle hidden-sm-down"
 							    th:text="${user.active} ? #{label.yes} : #{label.no}"
 							    th:classappend="${user.active} ? 'text-success' : 'text-danger'"></td>
 
 							<td class="text-center">
 								<a th:href="@{/admin/user/{username}(username=${user.username})}"
+								   style="margin-right: 10px; text-decoration: none;"
 								   th:title="#{label.view}" data-toggle="tooltip" data-placement="top">
 									<i class="fa fa-eye" aria-hidden="true"></i>
+								</a>
+
+								<a class="text-danger cursor-pointer-no-shadow"
+								   th:if="${user.active}" data-toggle="modal" data-target="#modal-activate-user"
+								   th:attr="data-username=${user.username}, data-message=#{message.html.deactivate.user(${user.username})}"
+								   th:title="#{label.deactivate}" rel="tooltip" data-placement="top">
+									<i class="fa fa-times" aria-hidden="true"></i>
+								</a>
+
+								<a class="text-success cursor-pointer-no-shadow"
+								   th:if="!${user.active}" data-toggle="modal" data-target="#modal-activate-user"
+								   th:attr="data-username=${user.username}, data-message=#{message.html.activate.user(${user.username})}"
+								   th:title="#{label.activate}" rel="tooltip" data-placement="top">
+									<i class="fa fa-check" aria-hidden="true"></i>
 								</a>
 							</td>
 						</tr>
@@ -83,6 +98,9 @@
 					</tbody>
 				</table>
 			</div>
+
+			<div layout:include="users/admin/modal-activate-user"></div>
+
 		</div>
 
 	</section>

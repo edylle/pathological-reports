@@ -85,6 +85,18 @@ public class UserService {
 		return save(new User(user));
 	}
 
+	public User activateUserBy(String username) throws Exception {
+		User user = findByUsername(username);
+
+		if (user.getActive()) {
+			user.setActive(false);
+		} else {
+			user.setActive(true);
+		}
+
+		return save(user);
+	}
+
 	public User findByUsername(String username) {
 		return userRepository.findByUsername(username);
 	}

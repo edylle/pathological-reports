@@ -81,7 +81,8 @@ public class AdminController {
 
 			userService.save(user, imageFile);
 
-			attributes.addFlashAttribute("successMessage", messages.getMessageBy("message.param.created", messages.getMessageBy("label.user")));
+			String message = user.isNewUser() ? "message.param.created" : "message.param.updated";
+			attributes.addFlashAttribute("successMessage", messages.getMessageBy(message, messages.getMessageBy("label.user")));
 
 		} catch (ImageFormatException e) {
 			model.addAttribute("navActive", NavIds.getInstance().getUsersAdmin());
@@ -130,6 +131,19 @@ public class AdminController {
 		mv.addObject("user", new UserVO(user, false));
 
 		return mv;
+	}
+
+	@RequestMapping(value = "/activate-user/{username}", method = RequestMethod.POST)
+	public String activateUser(@PathVariable String username, RedirectAttributes attributes) {
+		try {
+			userService.activateUserBy(username);
+
+			attributes.addFlashAttribute("successMessage", messages.getMessageBy("message.param.updated", username));
+		} catch (Exception e) {
+			attributes.addFlashAttribute("errorMessage", messages.getMessageBy("message.sorry.error"));
+		}
+
+		return "redirect:/admin/list-users";
 	}
 
 }
