@@ -14,6 +14,7 @@
 				<input type="hidden" th:field="*{role}" th:if="${user.role eq T(com.edylle.pathologicalreports.model.enumeration.RoleEnum).ADMIN}" />
 				<input type="hidden" th:field="*{newUser}" />
 				<input type="hidden" th:field="*{imagePath}" />
+				<input type="hidden" th:field="*{active}" />
 
 				<div layout:include="users/messages"></div>
 				<div layout:include="users/validation-messages"></div>
@@ -52,7 +53,7 @@
 						<input type="text" class="form-control text-lowercase" id="username" th:field="*{username}"
 					           maxlength="32" th:placeholder="#{placeholder.username}" required="required"
 					           th:classappend="${#fields.hasErrors('username')} ? is-invalid"
-					           th:disabled="!${user.newUser}"  />
+					           name="username" th:disabled="!${user.newUser}" />
 					</div>
 				</div>
 
@@ -64,7 +65,7 @@
 							<input type="password" class="form-control js-disabled" id="password" th:field="*{password}"
 						           maxlength="16" th:placeholder="#{placeholder.password}"
 						           th:classappend="${#fields.hasErrors('password')} ? is-invalid"
-						           th:disabled="!${user.newUser}" />
+						           name="password" th:disabled="!${user.newUser}" />
 						</div>
 					</div>
 
@@ -125,6 +126,7 @@
 			</form>
 		</div>
 
+		<script type="text/javascript" th:src="@{/js/user-input.js}"></script>
 		<script type="text/javascript" th:src="@{/js/file-size-check.js}"></script>
 		<script type="text/javascript" th:src="@{/js/input-image-file.js}"></script>
 

@@ -17,10 +17,14 @@ import javax.persistence.JoinTable;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -31,33 +35,43 @@ import com.edylle.pathologicalreports.model.vo.UserVO;
 @Table(name = "USER")
 public class User implements Serializable {
 
-	private static final long serialVersionUID = -1628287385114448495L;
+	private static final long serialVersionUID = 5716408104446654247L;
 
 	@Id
+	@NotEmpty(message = "{validation.field.required.username}")
+	@Size(max = 32, message = "{validation.length.username}")
 	@Column(name = "USERNAME", length = 32)
 	private String username;
 
-	@Email
+	@Email(message = "{validation.email}")
+	@NotEmpty(message = "{validation.field.required.email}")
+	@Size(max = 128, message = "{validation.length.email}")
 	@Column(name = "EMAIL", length = 128, unique = true, nullable = false)
 	private String email;
 
+	@NotEmpty(message = "{validation.field.required.phonenumber}")
+	@Size(max = 16, message = "{validation.length.phonenumber}")
 	@Column(name = "PHONE_NUMBER", length = 16, nullable = false)
 	private String phoneNumber;
 
+	@NotEmpty(message = "{alidation.field.required.password}")
 	@Column(name = "PASSWORD", length = 80, nullable = false)
 	private String password;
 
 	@Column(name = "IMAGE_PATH", length = 255)
 	private String imagePath;
 
+	@NotNull
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "DATE_CREATED", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateCreated;
 
+	@NotNull
 	@Column(name = "ACTIVE", nullable = false)
 	private Boolean active;
 
+	@NotNull
 	@Cascade({ CascadeType.ALL })
 	@ElementCollection(targetClass = RoleEnum.class, fetch = FetchType.EAGER)
 	@JoinTable(name = "ROLE_USER", joinColumns = @JoinColumn(name = "USERNAME_USER"))
@@ -75,10 +89,33 @@ public class User implements Serializable {
 		username = vo.getUsername();
 		email = vo.getEmail();
 		phoneNumber = vo.getPhoneNumber();
-		setPassword(vo.getPassword());
-		imagePath = vo.getImagePath();
 		roles = new HashSet<>();
 		roles.add(vo.getRole());
+		setPassword(vo.getPassword());
+	}
+
+	public void orverrideUser(UserVO vo) {
+		if (vo.getActive() != null)
+			this.setActive(vo.getActive());
+
+		if (StringUtils.isNotEmpty(vo.getEmail()))
+			this.setEmail(vo.getEmail());
+
+		if (StringUtils.isNotEmpty(vo.getPhoneNumber()))
+			this.setPhoneNumber(vo.getPhoneNumber());
+
+		if (StringUtils.isNotEmpty(vo.getPassword()))
+			this.setPassword(vo.getPassword());
+
+		if (StringUtils.isNotEmpty(vo.getImagePath()))
+			this.setImagePath(vo.getImagePath());
+
+		if (vo.getRole() != null) {
+			roles = new HashSet<>();
+			roles.add(vo.getRole());
+
+			this.setRoles(roles);
+		}
 	}
 
 	@Override

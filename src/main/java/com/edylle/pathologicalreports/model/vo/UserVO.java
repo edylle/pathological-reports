@@ -13,7 +13,7 @@ import com.edylle.pathologicalreports.model.enumeration.RoleEnum;
 
 public class UserVO implements Serializable {
 
-	private static final long serialVersionUID = -2959401146028248414L;
+	private static final long serialVersionUID = -5254697394869079721L;
 
 	private boolean isNewUser;
 
@@ -37,6 +37,8 @@ public class UserVO implements Serializable {
 	@NotNull(message = "{validation.field.required.role}")
 	private RoleEnum role;
 
+	private Boolean active;
+
 	public UserVO() {
 		isNewUser = true;
 	}
@@ -51,6 +53,7 @@ public class UserVO implements Serializable {
 		email = user.getEmail();
 		phoneNumber = user.getPhoneNumber();
 		imagePath = user.getImagePath();
+		active = user.getActive();
 		role = user.getRoles().iterator().next(); // this project has only on role per user
 	}
 
@@ -117,6 +120,14 @@ public class UserVO implements Serializable {
 
 	public void setRole(RoleEnum role) {
 		this.role = role;
+	}
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 
 }

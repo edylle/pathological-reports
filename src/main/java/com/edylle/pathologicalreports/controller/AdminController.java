@@ -84,9 +84,11 @@ public class AdminController {
 			String message = user.isNewUser() ? "message.param.created" : "message.param.updated";
 			attributes.addFlashAttribute("successMessage", messages.getMessageBy(message, messages.getMessageBy("label.user")));
 
+			return "redirect:/admin/list-users";
+
 		} catch (ImageFormatException e) {
 			model.addAttribute("navActive", NavIds.getInstance().getUsersAdmin());
-			attributes.addFlashAttribute("errorMessage", messages.getMessageBy("message.invalid.image.format"));
+			model.addAttribute("errorMessage", messages.getMessageBy("message.invalid.image.format"));
 
 			return "users/admin/new-user";
 
@@ -100,13 +102,11 @@ public class AdminController {
 			return "users/admin/new-user";
 
 		} catch (Exception e) {
-			attributes.addFlashAttribute("errorMessage", messages.getMessageBy("message.sorry.error"));
+			model.addAttribute("errorMessage", messages.getMessageBy("message.sorry.error"));
 			model.addAttribute("navActive", NavIds.getInstance().getUsersAdmin());
 
 			return "users/admin/new-user";
 		}
-
-		return "redirect:/admin/list-users";
 	}
 
 	@RequestMapping(value = "/user/{username}")

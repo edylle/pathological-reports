@@ -36,10 +36,10 @@ public class UserService {
 
 	public User save(UserVO user, MultipartFile imageFile) throws Exception {
 		Map<String, String> rejectedValues = new HashMap<>();
+		User returnUser;
 
 		// creating a new user
 		if (user.isNewUser()) {
-
 			if (findByUsername(user.getUsername()) != null) {
 				rejectedValues.put("username", messages.getMessageBy("message.param.duplicated", messages.getMessageBy("placeholder.username")));
 			}
@@ -60,29 +60,39 @@ public class UserService {
 					rejectedValues.put("password", messages.getMessageBy("message.passwords.dont.match"));
 				}
 			}
+			
+			if (!rejectedValues.isEmpty()) {
+				throw new CrudException(rejectedValues);
+			}
+
+			returnUser = new User(user);
 
 		// updating a previously created user
 		} else {
 			User userEmail = findByEmail(user.getEmail());
 			if (userEmail != null && !userEmail.getUsername().equalsIgnoreCase(user.getUsername())) {
-				rejectedValues.put("email", messages.getMessageBy("message.param.duplicated", messages.getMessageBy("placeholder.email")));
+				rejectedValues.put("email",
+						messages.getMessageBy("message.param.duplicated", messages.getMessageBy("placeholder.email")));
 			}
 			if (StringUtils.isNotEmpty(user.getPassword()) || StringUtils.isNotEmpty(user.getConfirmPassword())) {
 				if (!user.getPassword().equals(user.getConfirmPassword())) {
 					rejectedValues.put("password", messages.getMessageBy("message.passwords.dont.match"));
 				}
 			}
-		}
 
-		if (!rejectedValues.isEmpty()) {
-			throw new CrudException(rejectedValues);
+			if (!rejectedValues.isEmpty()) {
+				throw new CrudException(rejectedValues);
+			}
+
+			returnUser = findByUsername(user.getUsername());
+			returnUser.orverrideUser(user);
 		}
 
 		if (imageFile != null && !imageFile.isEmpty()) {
-			user.setImagePath(FilesUtils.saveImage(imagePathProperties.getUserContext(), imagePathProperties.getUsersPath(), imageFile, user.getUsername()));
+			returnUser.setImagePath(FilesUtils.saveImage(imagePathProperties.getUserContext(), imagePathProperties.getUsersPath(), imageFile, user.getUsername()));
 		}
 
-		return save(new User(user));
+		return save(returnUser);
 	}
 
 	public User activateUserBy(String username) throws Exception {
