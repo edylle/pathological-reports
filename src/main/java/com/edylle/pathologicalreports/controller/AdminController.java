@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,10 +51,21 @@ public class AdminController {
 	}
 
 	@RequestMapping("list-users")
-	public ModelAndView findUsers(@ModelAttribute("user") FindUserDTO user, @RequestParam(name = "warnMessage", value = "", required = false) String warnMessage) {
+	public ModelAndView findUsers(@ModelAttribute("user") FindUserDTO user,
+			                      @RequestParam(name = "warnMessage", value = "", required = false) String warnMessage,
+			                      @RequestParam(name = "initialPage", value = "", required = false) String initialPage) {
+
 		ModelAndView mv = new ModelAndView("users/admin/list-users");
 		mv.addObject("navActive", NavIds.getInstance().getUsersAdmin());
-		mv.addObject("users", userService.findBy(user));
+
+		int page = 0;
+		int size = 5;
+
+		if (StringUtils.isNumeric(initialPage)) {
+			page = Integer.valueOf(initialPage);
+		}
+
+		mv.addObject("users", userService.findBy(user, page, size));
 		mv.addObject("warnMessage", warnMessage);
 
 		mv.addObject("loggedUsername", UserUtils.getUser().getUsername());

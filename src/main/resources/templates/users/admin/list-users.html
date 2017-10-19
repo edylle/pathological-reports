@@ -92,12 +92,47 @@
 							</td>
 						</tr>
 
-						<tr th:if="${#lists.isEmpty(users)}">
+						<tr th:if="${users.numberOfElements eq 0}">
 							<td colspan="5" th:text="#{message.no.users.found}"></td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
+
+			<nav th:if="${users.totalPages gt 0}" class="float-right">
+				<ul class="pagination justify-content-end">
+
+					<li class="page-item" th:classappend="${users.first} ? 'disabled'">
+						<a class="page-link" th:href="@{/admin/list-users(initialPage='0', role=${user.role}, usernameOrEmail=${user.usernameOrEmail})}"
+						   th:title="#{label.first}" rel="tooltip" data-placement="top">
+						   <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+						</a>
+					</li>
+					<li class="page-item" th:classappend="${!users.hasPrevious()} ? 'disabled'">
+						<a class="page-link" th:href="@{/admin/list-users(initialPage=${users.number - 1}, role=${user.role}, usernameOrEmail=${user.usernameOrEmail})}"
+						   th:title="#{label.previous}" rel="tooltip" data-placement="top">
+							<i class="fa fa-angle-left" aria-hidden="true"></i>
+						</a>
+					</li>
+	
+					<li class="page-item" th:classappend="${!users.hasNext()} ? 'disabled'">
+						<a class="page-link" th:href="@{/admin/list-users(initialPage=${users.number + 1}, role=${user.role}, usernameOrEmail=${user.usernameOrEmail})}"
+						   th:title="#{label.next}" rel="tooltip" data-placement="top">
+							<i class="fa fa-angle-right" aria-hidden="true"></i>
+						</a>
+					</li>
+					<li class="page-item" th:classappend="${users.last} ? 'disabled'">
+						<a class="page-link" th:href="@{/admin/list-users/(initialPage=${users.totalPages - 1}, role=${user.role}, usernameOrEmail=${user.usernameOrEmail})}"
+						   th:title="#{label.last}" rel="tooltip" data-placement="top">
+							 <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+						</a>
+					</li>
+	
+				</ul>
+			</nav>
+
+			<p class="float-right p-pagination-status"
+			   th:utext="#{label.pagination.status(${users.getFromElement()}, ${users.getToElement()}, ${users.totalElements})}"></p>
 
 			<div layout:include="users/admin/modal-activate-user"></div>
 

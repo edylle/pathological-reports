@@ -7,6 +7,9 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,6 +22,7 @@ import com.edylle.pathologicalreports.properties.ImagePathProperties;
 import com.edylle.pathologicalreports.repository.UserRepository;
 import com.edylle.pathologicalreports.utils.FilesUtils;
 import com.edylle.pathologicalreports.utils.Messages;
+import com.edylle.pathologicalreports.wrapper.PageWrapper;
 
 @Service
 public class UserService {
@@ -115,7 +119,8 @@ public class UserService {
 		return userRepository.findByEmail(email);
 	}
 
-	public List<User> findBy(FindUserDTO dto) {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public PageWrapper<User> findBy(FindUserDTO dto, int page, int size) {
 		List<String> roleStr;
 		String usernameOrEmail;
 
@@ -131,7 +136,10 @@ public class UserService {
 			usernameOrEmail = "%".concat(dto.getUsernameOrEmail().toLowerCase()).concat("%");
 		}
 
-		return userRepository.findBy(roleStr, usernameOrEmail);
+		Pageable pageable = new PageRequest(page, size);
+		Page<User> pageInterface = userRepository.findBy(roleStr, usernameOrEmail, pageable);
+
+		return new PageWrapper(pageInterface.getContent(), pageable, pageInterface.getTotalElements());
 	}
 
 }
