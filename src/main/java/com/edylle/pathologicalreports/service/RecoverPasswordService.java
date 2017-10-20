@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import com.edylle.pathologicalreports.exception.BusinessException;
 import com.edylle.pathologicalreports.exception.EmailException;
@@ -69,19 +68,16 @@ public class RecoverPasswordService {
 			throw new TokenException(messages.getMessageBy("message.token.exception"));
 		}
 
-		User usuario = recoverPassword.getUser();
-		usuario.setPassword(vo.getPassword());
+		User user = recoverPassword.getUser();
+		user.setPassword(vo.getPassword());
 
-		userService.update(usuario);
+		userService.save(user);
 		delete(recoverPassword);
 	}
 
 	private void validateUpdate(PasswordVO vo) throws BusinessException {
 		if (!vo.getPassword().equals(vo.getConfirmPassword())) {
 			throw new BusinessException(messages.getMessageBy("message.passwords.dont.match"));
-		}
-		if (!StringUtils.isEmpty(vo.getPassword()) && vo.getPassword().length() < 5 || vo.getPassword().length() > 16) {
-			throw new BusinessException(messages.getMessageBy("message.new.password.length.validation"));
 		}
 	}
 

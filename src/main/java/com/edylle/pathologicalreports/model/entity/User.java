@@ -2,6 +2,7 @@ package com.edylle.pathologicalreports.model.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -16,46 +17,61 @@ import javax.persistence.JoinTable;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.edylle.pathologicalreports.model.enumeration.RoleEnum;
+import com.edylle.pathologicalreports.model.vo.UserVO;
 
 @Entity
 @Table(name = "USER")
 public class User implements Serializable {
 
-	private static final long serialVersionUID = -922459359170477679L;
+	private static final long serialVersionUID = 5716408104446654247L;
 
 	@Id
+	@NotEmpty(message = "{validation.field.required.username}")
+	@Size(max = 32, message = "{validation.length.username}")
 	@Column(name = "USERNAME", length = 32)
 	private String username;
 
-	@Email
+	@Email(message = "{validation.email}")
+	@NotEmpty(message = "{validation.field.required.email}")
+	@Size(max = 128, message = "{validation.length.email}")
 	@Column(name = "EMAIL", length = 128, unique = true, nullable = false)
 	private String email;
 
+	@NotEmpty(message = "{validation.field.required.phonenumber}")
+	@Size(max = 16, message = "{validation.length.phonenumber}")
 	@Column(name = "PHONE_NUMBER", length = 16, nullable = false)
 	private String phoneNumber;
 
+	@NotEmpty(message = "{alidation.field.required.password}")
 	@Column(name = "PASSWORD", length = 80, nullable = false)
 	private String password;
 
-	@Column(name = "IMAGE_DIR", length = 255)
-	private String imageDir;
+	@Column(name = "IMAGE_PATH", length = 255)
+	private String imagePath;
 
+	@NotNull
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "DATE_CREATED", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateCreated;
 
+	@NotNull
 	@Column(name = "ACTIVE", nullable = false)
 	private Boolean active;
 
+	@NotNull
 	@Cascade({ CascadeType.ALL })
 	@ElementCollection(targetClass = RoleEnum.class, fetch = FetchType.EAGER)
 	@JoinTable(name = "ROLE_USER", joinColumns = @JoinColumn(name = "USERNAME_USER"))
@@ -66,6 +82,65 @@ public class User implements Serializable {
 	public User() {
 		dateCreated = new Date();
 		active = true;
+	}
+
+	public User(UserVO vo) {
+		this();
+		username = vo.getUsername();
+		email = vo.getEmail();
+		phoneNumber = vo.getPhoneNumber();
+		roles = new HashSet<>();
+		roles.add(vo.getRole());
+		setPassword(vo.getPassword());
+	}
+
+	public void orverrideUser(UserVO vo) {
+		if (vo.getActive() != null)
+			this.setActive(vo.getActive());
+
+		if (StringUtils.isNotEmpty(vo.getEmail()))
+			this.setEmail(vo.getEmail());
+
+		if (StringUtils.isNotEmpty(vo.getPhoneNumber()))
+			this.setPhoneNumber(vo.getPhoneNumber());
+
+		if (StringUtils.isNotEmpty(vo.getPassword()))
+			this.setPassword(vo.getPassword());
+
+		if (StringUtils.isNotEmpty(vo.getImagePath()))
+			this.setImagePath(vo.getImagePath());
+
+		if (vo.getRole() != null) {
+			roles = new HashSet<>();
+			roles.add(vo.getRole());
+
+			this.setRoles(roles);
+		}
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (username == null) {
+			if (other.username != null)
+				return false;
+		} else if (!username.equals(other.username))
+			return false;
+		return true;
 	}
 
 	// GETTERS AND SETTERS
@@ -101,12 +176,12 @@ public class User implements Serializable {
 		this.password = new BCryptPasswordEncoder().encode(password);
 	}
 
-	public String getImageDir() {
-		return imageDir;
+	public String getImagePath() {
+		return imagePath;
 	}
 
-	public void setImageDir(String imageDir) {
-		this.imageDir = imageDir;
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
 
 	public Date getDateCreated() {

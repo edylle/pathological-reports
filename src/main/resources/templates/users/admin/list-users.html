@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="users/layout">
+
+	<section layout:fragment="content">
+
+		<div class="container container-content">
+			<form>
+				<div layout:include="users/messages"></div>
+			</form>
+
+			<a th:href="@{/admin/user/{username}(username=${loggedUsername})}">
+				<img th:src="${#strings.isEmpty(loggedImage)} ? @{/img/user-icon.png} : ${#httpServletRequest.getContextPath()} + ${loggedImage}" width="60" height="60"
+				     class="rounded-circle float-right img-my-account" style="margin-top: -5px;"
+				     th:title="#{label.my.account}" data-toggle="tooltip" data-placement="left" />
+			</a>
+
+			<br/><br/><br/>
+
+			<div class="clearfix">
+				<h3 th:text="#{label.users}" class="float-left"></h3>
+				<a class="btn btn-success cursor-pointer float-right border rounded"
+				        th:title="#{label.new.user}" data-toggle="tooltip" data-placement="left" th:href="@{/admin/new-user}">
+				  <i class="fa fa-plus" aria-hidden="true"></i>
+				</a>
+ 			</div>
+
+	 		<hr style="margin-bottom: 30px;"/>
+
+			<form method="get" th:action="@{/admin/list-users}" th:object="${user}">
+				<div class="form-group">
+					<select class="custom-select" th:field="*{role}">
+						<option value="" class="select-option" th:text="'- ' + #{label.select.role} + ' -'" />
+						<option th:each="role : ${getRoles}" th:value="${role}" th:text="${role.description}" />
+					</select>
+				</div>
+
+				<div class="form-group">
+				 	<div class="input-group mb-2 mb-sm-0">
+						<input type="text" class="form-control" th:field="*{usernameOrEmail}" th:placeholder="#{placeholder.username.or.email}" />
+						<button type="submit" class="btn input-group-addon cursor-pointer"
+						        th:title="#{label.search}" data-toggle="tooltip" data-placement="top">
+							<i class="fa fa-search" aria-hidden="true"></i>
+						</button>
+					</div>
+				</div>
+			</form>
+
+			<div class="table-responsive">
+				<table class="table table-bordered table-striped table-hover">
+					<thead>
+						<tr>
+							<th class="text-left" th:text="#{label.username}"></th>
+							<th class="text-left hidden-sm-down" th:text="#{label.email}"></th>
+							<th class="text-left hidden-sm-down" th:text="#{label.role}"></th>
+							<th class="text-center hidden-sm-down" th:text="#{label.active}"></th>
+							<th></th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr th:each="user : ${users}">
+							<td class="text-left align-middle" th:text="${user.username}"></td>
+							<td class="text-left align-middle hidden-sm-down" th:text="${user.email}"></td>
+							<td class="text-left align-middle hidden-sm-down" th:text="${user.roles.iterator().next().getDescription()}"></td>
+							<td class="text-center align-middle hidden-sm-down"
+							    th:text="${user.active} ? #{label.yes} : #{label.no}"
+							    th:classappend="${user.active} ? 'text-success' : 'text-danger'"></td>
+
+							<td class="text-center">
+								<a th:href="@{/admin/user/{username}(username=${user.username})}"
+								   style="margin-right: 10px; text-decoration: none;"
+								   th:title="#{label.view}" data-toggle="tooltip" data-placement="top">
+									<i class="fa fa-eye" aria-hidden="true"></i>
+								</a>
+
+								<a class="text-danger cursor-pointer-no-shadow"
+								   th:if="${user.active}" data-toggle="modal" data-target="#modal-activate-user"
+								   th:attr="data-username=${user.username}, data-message=#{message.html.deactivate.user(${user.username})}"
+								   th:title="#{label.deactivate}" rel="tooltip" data-placement="top">
+									<i class="fa fa-times" aria-hidden="true"></i>
+								</a>
+
+								<a class="text-success cursor-pointer-no-shadow"
+								   th:if="!${user.active}" data-toggle="modal" data-target="#modal-activate-user"
+								   th:attr="data-username=${user.username}, data-message=#{message.html.activate.user(${user.username})}"
+								   th:title="#{label.activate}" rel="tooltip" data-placement="top">
+									<i class="fa fa-check" aria-hidden="true"></i>
+								</a>
+							</td>
+						</tr>
+
+						<tr th:if="${users.numberOfElements eq 0}">
+							<td colspan="5" th:text="#{message.no.users.found}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<nav th:if="${users.totalPages gt 0}" class="float-right">
+				<ul class="pagination justify-content-end">
+
+					<li class="page-item" th:classappend="${users.first} ? 'disabled'">
+						<a class="page-link" th:href="@{/admin/list-users(initialPage='0', role=${user.role}, usernameOrEmail=${user.usernameOrEmail})}"
+						   th:title="#{label.first}" rel="tooltip" data-placement="top">
+						   <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+						</a>
+					</li>
+					<li class="page-item" th:classappend="${!users.hasPrevious()} ? 'disabled'">
+						<a class="page-link" th:href="@{/admin/list-users(initialPage=${users.number - 1}, role=${user.role}, usernameOrEmail=${user.usernameOrEmail})}"
+						   th:title="#{label.previous}" rel="tooltip" data-placement="top">
+							<i class="fa fa-angle-left" aria-hidden="true"></i>
+						</a>
+					</li>
+	
+					<li class="page-item" th:classappend="${!users.hasNext()} ? 'disabled'">
+						<a class="page-link" th:href="@{/admin/list-users(initialPage=${users.number + 1}, role=${user.role}, usernameOrEmail=${user.usernameOrEmail})}"
+						   th:title="#{label.next}" rel="tooltip" data-placement="top">
+							<i class="fa fa-angle-right" aria-hidden="true"></i>
+						</a>
+					</li>
+					<li class="page-item" th:classappend="${users.last} ? 'disabled'">
+						<a class="page-link" th:href="@{/admin/list-users/(initialPage=${users.totalPages - 1}, role=${user.role}, usernameOrEmail=${user.usernameOrEmail})}"
+						   th:title="#{label.last}" rel="tooltip" data-placement="top">
+							 <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+						</a>
+					</li>
+	
+				</ul>
+			</nav>
+
+			<p class="float-right p-pagination-status"
+			   th:utext="#{label.pagination.status(${users.getFromElement()}, ${users.getToElement()}, ${users.totalElements})}"></p>
+
+			<div layout:include="users/admin/modal-activate-user"></div>
+
+		</div>
+
+	</section>
+
+</html>

@@ -11,9 +11,9 @@ import com.edylle.pathologicalreports.utils.Messages;
 
 public enum RoleEnum {
 
-	ADMIN("role.admin.description", "/admin/home"),
-	PROFESSOR("role.professor.description", "/professor/home"),
-	STUDENT("role.student.description", "/student/home");
+	ADMIN("role.admin.description", "/admin/list-users"),
+	PROFESSOR("role.professor.description", ""),
+	STUDENT("role.student.description", "");
 
 	@Component
 	public static class RoleEnumServiceInjector {

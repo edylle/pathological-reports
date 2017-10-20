@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+	<div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${!#strings.isEmpty(successMessage)}">
+		<button type="button" class="close" data-dismiss="alert">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<span th:text="${successMessage}"></span>
+	</div>
+
+	<div class="alert alert-warning alert-dismissible fade show" role="alert" th:if="${!#strings.isEmpty(warnMessage)}">
+		<button type="button" class="close" data-dismiss="alert">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<span th:text="${warnMessage}"></span>
+	</div>
+
+	<div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${!#strings.isEmpty(errorMessage)}">
+		<button type="button" class="close" data-dismiss="alert">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<span th:text="${errorMessage}"></span>
+	</div>
+
+</html>
