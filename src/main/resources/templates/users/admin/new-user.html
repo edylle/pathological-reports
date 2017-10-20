@@ -119,7 +119,7 @@
 
 						<button type="button" class="btn btn-danger cursor-pointer js-btn-view"
 						        th:text="#{label.go.back}" th:if="!${user.newUser}"
-						        th:onclick="'window.location.href = \'' + @{/admin/list-users} + '\''"></button>
+						        onclick="window.history.back()"></button>
 					</div>
 				</div>
 
