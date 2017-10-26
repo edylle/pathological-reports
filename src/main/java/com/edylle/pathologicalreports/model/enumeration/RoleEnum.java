@@ -12,7 +12,7 @@ import com.edylle.pathologicalreports.utils.Messages;
 public enum RoleEnum {
 
 	ADMIN("role.admin.description", "/admin/list-users"),
-	PROFESSOR("role.professor.description", ""),
+	PROFESSOR("role.professor.description", "/professor/list-users"),
 	STUDENT("role.student.description", "");
 
 	@Component

@@ -13,7 +13,7 @@ import com.edylle.pathologicalreports.model.enumeration.RoleEnum;
 
 public class UserVO implements Serializable {
 
-	private static final long serialVersionUID = -5254697394869079721L;
+	private static final long serialVersionUID = 6755403020412303720L;
 
 	private boolean isNewUser;
 
@@ -45,6 +45,11 @@ public class UserVO implements Serializable {
 
 	public UserVO(boolean isNewUser) {
 		this.isNewUser = isNewUser;
+	}
+
+	public UserVO(boolean isNewUser, RoleEnum role) {
+		this.isNewUser = isNewUser;
+		this.role = role;
 	}
 
 	public UserVO(User user, boolean isNewUser) {

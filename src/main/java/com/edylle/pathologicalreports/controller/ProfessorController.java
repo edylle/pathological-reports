@@ -1,7 +1,5 @@
 package com.edylle.pathologicalreports.controller;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -30,20 +28,14 @@ import com.edylle.pathologicalreports.service.UserService;
 import com.edylle.pathologicalreports.utils.Messages;
 import com.edylle.pathologicalreports.utils.UserUtils;
 
-
 @Controller
-@RequestMapping("/admin")
-public class AdminController {
+@RequestMapping("/professor")
+public class ProfessorController {
 
 	@Autowired
 	private UserService userService;
 	@Autowired
 	private Messages messages;
-
-	@ModelAttribute("getRoles")
-	public List<RoleEnum> getRoles() {
-		return Arrays.asList(RoleEnum.PROFESSOR, RoleEnum.STUDENT);
-	}
 
 	@ModelAttribute("getNavIds")
 	public NavIds getNavIds() {
@@ -55,8 +47,8 @@ public class AdminController {
 			                      @RequestParam(name = "warnMessage", value = "", required = false) String warnMessage,
 			                      @RequestParam(name = "initialPage", value = "", required = false) String initialPage) {
 
-		ModelAndView mv = new ModelAndView("users/admin/list-users");
-		mv.addObject("navActive", NavIds.getInstance().getUsersAdmin());
+		ModelAndView mv = new ModelAndView("users/professor/list-users");
+		mv.addObject("navActive", NavIds.getInstance().getUsersProfessor());
 
 		int page = 0;
 		int size = 5;
@@ -76,9 +68,9 @@ public class AdminController {
 
 	@RequestMapping("new-user")
 	public ModelAndView newUser() {
-		ModelAndView mv = new ModelAndView("users/admin/new-user");
-		mv.addObject("navActive", NavIds.getInstance().getUsersAdmin());
-		mv.addObject("user", new UserVO(true));
+		ModelAndView mv = new ModelAndView("users/professor/new-user");
+		mv.addObject("navActive", NavIds.getInstance().getUsersProfessor());
+		mv.addObject("user", new UserVO(true, RoleEnum.STUDENT));
 
 		return mv;
 	}
@@ -87,8 +79,8 @@ public class AdminController {
 	public String newUserPost(Model model, @ModelAttribute("user") @Validated UserVO user, Errors errors, RedirectAttributes attributes, @RequestParam("image") MultipartFile imageFile) {
 		try {
 			if (errors.hasErrors()) {
-				model.addAttribute("navActive", NavIds.getInstance().getUsersAdmin());
-				return "users/admin/new-user";
+				model.addAttribute("navActive", NavIds.getInstance().getUsersProfessor());
+				return "users/professor/new-user";
 			}
 
 			userService.save(user, imageFile);
@@ -96,28 +88,28 @@ public class AdminController {
 			String message = user.isNewUser() ? "message.param.created" : "message.param.updated";
 			attributes.addFlashAttribute("successMessage", messages.getMessageBy(message, messages.getMessageBy("label.user")));
 
-			return "redirect:/admin/list-users";
+			return "redirect:/professor/list-users";
 
 		} catch (ImageFormatException e) {
-			model.addAttribute("navActive", NavIds.getInstance().getUsersAdmin());
+			model.addAttribute("navActive", NavIds.getInstance().getUsersProfessor());
 			model.addAttribute("errorMessage", messages.getMessageBy("message.invalid.image.format"));
 
-			return "users/admin/new-user";
+			return "users/professor/new-user";
 
 		} catch (CrudException e) {
 			for (Map.Entry<String, String> entry : e.getRejectedValues().entrySet()) {
 				errors.rejectValue(entry.getKey(), null, entry.getValue());
 			}
 
-			model.addAttribute("navActive", NavIds.getInstance().getUsersAdmin());
+			model.addAttribute("navActive", NavIds.getInstance().getUsersProfessor());
 
-			return "users/admin/new-user";
+			return "users/professor/new-user";
 
 		} catch (Exception e) {
 			model.addAttribute("errorMessage", messages.getMessageBy("message.sorry.error"));
-			model.addAttribute("navActive", NavIds.getInstance().getUsersAdmin());
+			model.addAttribute("navActive", NavIds.getInstance().getUsersProfessor());
 
-			return "users/admin/new-user";
+			return "users/professor/new-user";
 		}
 	}
 
@@ -127,19 +119,19 @@ public class AdminController {
 
 		if (user == null) {
 			mv.addObject("warnMessage", messages.getMessageBy("message.user.not.found"));
-			mv.setViewName("redirect:/admin/list-users");
+			mv.setViewName("redirect:/professor/list-users");
 
 			return mv;
 		}
-		if (user.getRoles().contains(RoleEnum.ADMIN) && !user.equals(UserUtils.getUser())) {
-			mv.addObject("warnMessage", messages.getMessageBy("message.not.permission.modify.admin"));
-			mv.setViewName("users/admin/list-users");
+		if ((user.getRoles().contains(RoleEnum.ADMIN) || user.getRoles().contains(RoleEnum.PROFESSOR)) && !user.equals(UserUtils.getUser())) {
+			mv.addObject("warnMessage", messages.getMessageBy("message.not.permission.modify.admin.professor"));
+			mv.setViewName("users/professor/list-users");
 
 			return mv;
 		}
 
-		mv.addObject("navActive", NavIds.getInstance().getUsersAdmin());
-		mv.setViewName("users/admin/new-user");
+		mv.addObject("navActive", NavIds.getInstance().getUsersProfessor());
+		mv.setViewName("users/professor/new-user");
 		mv.addObject("user", new UserVO(user, false));
 
 		return mv;
@@ -155,7 +147,7 @@ public class AdminController {
 			attributes.addFlashAttribute("errorMessage", messages.getMessageBy("message.sorry.error"));
 		}
 
-		return "redirect:/admin/list-users";
+		return "redirect:/professor/list-users";
 	}
 
 }
