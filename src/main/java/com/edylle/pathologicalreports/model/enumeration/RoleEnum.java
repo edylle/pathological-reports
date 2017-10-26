@@ -13,7 +13,7 @@ public enum RoleEnum {
 
 	ADMIN("role.admin.description", "/admin/list-users"),
 	PROFESSOR("role.professor.description", "/professor/list-users"),
-	STUDENT("role.student.description", "");
+	STUDENT("role.student.description", "/student/my-account");
 
 	@Component
 	public static class RoleEnumServiceInjector {
