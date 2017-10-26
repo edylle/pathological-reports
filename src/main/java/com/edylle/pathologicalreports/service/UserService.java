@@ -22,6 +22,7 @@ import com.edylle.pathologicalreports.properties.ImagePathProperties;
 import com.edylle.pathologicalreports.repository.UserRepository;
 import com.edylle.pathologicalreports.utils.FilesUtils;
 import com.edylle.pathologicalreports.utils.Messages;
+import com.edylle.pathologicalreports.utils.UserUtils;
 import com.edylle.pathologicalreports.wrapper.PageWrapper;
 
 @Service
@@ -75,8 +76,7 @@ public class UserService {
 		} else {
 			User userEmail = findByEmail(user.getEmail());
 			if (userEmail != null && !userEmail.getUsername().equalsIgnoreCase(user.getUsername())) {
-				rejectedValues.put("email",
-						messages.getMessageBy("message.param.duplicated", messages.getMessageBy("placeholder.email")));
+				rejectedValues.put("email", messages.getMessageBy("message.param.duplicated", messages.getMessageBy("placeholder.email")));
 			}
 			if (StringUtils.isNotEmpty(user.getPassword()) || StringUtils.isNotEmpty(user.getConfirmPassword())) {
 				if (!user.getPassword().equals(user.getConfirmPassword())) {
@@ -121,11 +121,17 @@ public class UserService {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public PageWrapper<User> findBy(FindUserDTO dto, int page, int size) {
-		List<String> roleStr;
+		List<String> roleStr = null;
 		String usernameOrEmail;
 
 		if (dto.getRole() == null) {
-			roleStr = Arrays.asList(RoleEnum.PROFESSOR.name(), RoleEnum.STUDENT.name());
+
+			if (UserUtils.isAdmin())
+				roleStr = Arrays.asList(RoleEnum.PROFESSOR.name(), RoleEnum.STUDENT.name());
+
+			else if (UserUtils.isProfessor())
+				roleStr = Arrays.asList(RoleEnum.STUDENT.name());
+
 		} else {
 			roleStr = Arrays.asList(dto.getRole().name());
 		}

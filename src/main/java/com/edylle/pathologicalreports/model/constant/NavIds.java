@@ -2,7 +2,7 @@ package com.edylle.pathologicalreports.model.constant;
 
 public final class NavIds {
 
-	private static NavIds instance = new NavIds();
+	private static final NavIds instance = new NavIds();
 
 	private final static String FORM = "nav-form";
 	private final static String CLIENTS = "nav-clients";

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="users/layout">
+
+	<section layout:fragment="content">
+
+		<div class="container container-content">
+
+			<form enctype="multipart/form-data" method="post" th:action="@{/professor/new-user}" th:object="${user}">
+
+				<input type="hidden" th:field="*{username}" th:if="!${user.newUser}" />
+				<input type="hidden" th:field="*{role}" />
+				<input type="hidden" th:field="*{newUser}" />
+				<input type="hidden" th:field="*{imagePath}" />
+				<input type="hidden" th:field="*{active}" />
+
+				<div layout:include="users/messages"></div>
+				<div layout:include="users/validation-messages"></div>
+
+				<div class="form-group row" style="text-align: center;">
+					<div class="mx-auto">
+						<input id="input-image" class="inputfile js-disabled" type="file" name="image" accept="image/*" th:disabled="!${user.newUser}"/>
+
+						<label id="id-label-inputfile" for="input-image" class="label-inputfile cursor-pointer rounded-circle" aria-describedby="imageHelp"
+						       th:style="${#strings.isEmpty(user.imagePath)} ? 'background-image: url(' +  @{/img/user-icon.png} + ')' : 'background-image: url(' + ${#httpServletRequest.getContextPath()} + ${user.imagePath} + ')'">
+							<span class="span-text-img-file" th:text="#{label.photo}"></span>
+						</label>
+
+						<small id="imageHelp" class="form-text text-muted" th:text="#{message.max.size.image}" th:if="${user.newUser}"></small>
+						<small id="imageHelp-invalid" class="form-text text-muted display-none" th:text="#{message.max.size.image.invalid}"></small>
+						<small id="imageHelp-error" class="form-text text-muted display-none" th:text="#{message.image.error}"></small>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<div class="col-md-3"></div>
+					<label for="username" class="col-sm-2 col-form-label custom-label-alignment" th:text="#{label.username}"></label>
+					<div class="col-sm-4">
+						<input type="text" class="form-control text-lowercase" id="username" th:field="*{username}"
+					           maxlength="32" th:placeholder="#{placeholder.username}" required="required"
+					           th:classappend="${#fields.hasErrors('username')} ? is-invalid"
+					           name="username" th:disabled="!${user.newUser}" />
+					</div>
+				</div>
+
+				<div class="js-password-new" th:classappend="!${user.newUser} ? display-none">
+					<div class="form-group row">
+						<div class="col-md-3"></div>
+						<label for="password" class="col-sm-2 col-form-label custom-label-alignment" th:text="#{label.password}"></label>
+						<div class="col-sm-4">
+							<input type="password" class="form-control js-disabled" id="password" th:field="*{password}"
+						           maxlength="16" th:placeholder="#{placeholder.password}"
+						           th:classappend="${#fields.hasErrors('password')} ? is-invalid"
+						           name="password" th:disabled="!${user.newUser}" />
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<div class="col-md-3"></div>
+						<label for="confirm-password" class="col-sm-2 col-form-label custom-label-alignment" th:text="#{label.confirm.password}"></label>
+						<div class="col-sm-4">
+							<input type="password" class="form-control js-disabled" id="confirm-password" th:field="*{confirmPassword}"
+						           maxlength="16" th:placeholder="#{placeholder.confirm.new.password}"
+						           th:classappend="${#fields.hasErrors('confirmPassword')} ? is-invalid"
+						           th:disabled="!${user.newUser}" />
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<div class="col-md-3"></div>
+					<label for="email" class="col-sm-2 col-form-label custom-label-alignment" th:text="#{label.email}"></label>
+					<div class="col-sm-4">
+						<input type="email" class="form-control js-disabled" id="email" th:field="*{email}" aria-describedby="emailHelp"
+					           maxlength="128" th:placeholder="#{placeholder.email}" required="required"
+					           th:classappend="${#fields.hasErrors('email')} ? is-invalid" th:disabled="!${user.newUser}" />
+					    <small id="emailHelp" class="form-text text-muted" th:text="#{message.never.share.email}"></small>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<div class="col-md-3"></div>
+					<label for="phone" class="col-sm-2 col-form-label custom-label-alignment" th:text="#{label.phone.number}"></label>
+					<div class="col-sm-4">
+						<input type="text" class="form-control js-disabled" id="phone" th:field="*{phoneNumber}" aria-describedby="phoneHelp"
+					           maxlength="16" th:placeholder="#{placeholder.phone.number}" required="required"
+					           th:classappend="${#fields.hasErrors('phoneNumber')} ? is-invalid" th:disabled="!${user.newUser}" />
+					    <small id="phoneHelp" class="form-text text-muted" th:text="#{message.never.share.phone.number}"></small>
+					</div>
+				</div>
+
+				<br />
+
+				<div class="form-group row" style="text-align: center;">
+					<div class="mx-auto">
+						<button type="submit" class="btn btn-success cursor-pointer js-btn-new" th:classappend="!${user.newUser} ? display-none"
+						        th:text="#{label.submit}" style="margin-right: 8px;"></button>
+
+						<button type="button" class="btn btn-primary cursor-pointer js-btn-view"
+						        th:text="#{label.edit}" style="margin-right: 8px;" th:if="!${user.newUser}" onclick="enableFields()"></button>
+
+						<button type="button" class="btn btn-danger cursor-pointer js-btn-new" th:classappend="!${user.newUser} ? display-none"
+						        th:text="#{label.cancel}"
+						        th:onclick="'window.location.href = \'' + @{/professor/list-users} + '\''"></button>
+
+						<button type="button" class="btn btn-danger cursor-pointer js-btn-view"
+						        th:text="#{label.go.back}" th:if="!${user.newUser}"
+						        onclick="window.history.back()"></button>
+					</div>
+				</div>
+
+			</form>
+		</div>
+
+		<script type="text/javascript" th:src="@{/js/user-input.js}"></script>
+		<script type="text/javascript" th:src="@{/js/file-size-check.js}"></script>
+		<script type="text/javascript" th:src="@{/js/input-image-file.js}"></script>
+
+	</section>
+
+</html>
