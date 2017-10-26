@@ -28,7 +28,7 @@
 				<li class="nav-item">
 					<a th:id="${getNavIds.getUsersAdmin()}" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/list-users}" class="nav-link navbar-link-custom" th:text="#{label.users}"></a>
 					<a th:id="${getNavIds.getUsersProfessor()}" sec:authorize="hasRole('PROFESSOR')" href="" class="nav-link navbar-link-custom" th:text="#{label.users}"></a>
-					<a th:id="${getNavIds.getUsersStudent()}" sec:authorize="hasRole('STUDENT')"  href="" class="nav-link navbar-link-custom" th:text="#{label.users}"></a>
+					<a th:id="${getNavIds.getUsersStudent()}" sec:authorize="hasRole('STUDENT')"  href="" class="nav-link navbar-link-custom" th:text="#{label.my.account}"></a>
 				</li>
 
 				<li class="nav-item">
