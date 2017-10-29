@@ -22,7 +22,7 @@
 				</li>
 
 				<li class="nav-item" sec:authorize="hasAnyRole('ROLE_PROFESSOR', 'ROLE_STUDENT')">
-					<a th:id="${getNavIds.getClients()}" href="" class="nav-link navbar-link-custom" th:text="#{label.clients}"></a>
+					<a th:id="${getNavIds.getOwners()}" href="" class="nav-link navbar-link-custom" th:text="#{label.owners}"></a>
 				</li>
 
 				<li class="nav-item">

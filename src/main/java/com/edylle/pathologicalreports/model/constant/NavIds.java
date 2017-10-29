@@ -5,7 +5,7 @@ public final class NavIds {
 	private static final NavIds instance = new NavIds();
 
 	private final static String FORM = "nav-form";
-	private final static String CLIENTS = "nav-clients";
+	private final static String OWNERS = "nav-owners";
 	private final static String USERS_ADMIN = "nav-users-admin";
 	private final static String USERS_PROFESSOR = "nav-users-professor";
 	private final static String USERS_STUDENT = "nav-users-student";
@@ -23,8 +23,8 @@ public final class NavIds {
 		return FORM;
 	}
 
-	public String getClients() {
-		return CLIENTS;
+	public String getOwners() {
+		return OWNERS;
 	}
 
 	public String getUsersAdmin() {
