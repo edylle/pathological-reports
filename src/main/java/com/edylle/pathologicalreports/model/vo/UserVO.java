@@ -13,9 +13,9 @@ import com.edylle.pathologicalreports.model.enumeration.RoleEnum;
 
 public class UserVO implements Serializable {
 
-	private static final long serialVersionUID = 6755403020412303720L;
+	private static final long serialVersionUID = 378245765176312513L;
 
-	private boolean isNewUser;
+	private boolean isNewRegistry;
 
 	@NotEmpty(message = "{validation.field.required.username}")
 	@Size(max = 32, message = "{validation.length.username}")
@@ -40,20 +40,20 @@ public class UserVO implements Serializable {
 	private Boolean active;
 
 	public UserVO() {
-		isNewUser = true;
+		isNewRegistry = true;
 	}
 
-	public UserVO(boolean isNewUser) {
-		this.isNewUser = isNewUser;
+	public UserVO(boolean isNewRegistry) {
+		this.isNewRegistry = isNewRegistry;
 	}
 
-	public UserVO(boolean isNewUser, RoleEnum role) {
-		this.isNewUser = isNewUser;
+	public UserVO(boolean isNewRegistry, RoleEnum role) {
+		this.isNewRegistry = isNewRegistry;
 		this.role = role;
 	}
 
-	public UserVO(User user, boolean isNewUser) {
-		this.isNewUser = isNewUser;
+	public UserVO(User user, boolean isNewRegistry) {
+		this.isNewRegistry = isNewRegistry;
 		username = user.getUsername();
 		email = user.getEmail();
 		phoneNumber = user.getPhoneNumber();
@@ -63,12 +63,12 @@ public class UserVO implements Serializable {
 	}
 
 	// GETTERS AND SETTERSFs
-	public boolean isNewUser() {
-		return isNewUser;
+	public boolean isNewRegistry() {
+		return isNewRegistry;
 	}
 
-	public void setNewUser(boolean isNewUser) {
-		this.isNewUser = isNewUser;
+	public void setNewRegistry(boolean isNewRegistry) {
+		this.isNewRegistry = isNewRegistry;
 	}
 
 	public String getUsername() {

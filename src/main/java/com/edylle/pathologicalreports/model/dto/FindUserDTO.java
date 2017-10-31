@@ -1,8 +1,12 @@
 package com.edylle.pathologicalreports.model.dto;
 
+import java.io.Serializable;
+
 import com.edylle.pathologicalreports.model.enumeration.RoleEnum;
 
-public class FindUserDTO {
+public class FindUserDTO implements Serializable {
+
+	private static final long serialVersionUID = 976657933187759765L;
 
 	private RoleEnum role;
 	private String usernameOrEmail;

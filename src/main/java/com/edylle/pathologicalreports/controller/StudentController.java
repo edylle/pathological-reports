@@ -43,13 +43,13 @@ public class StudentController {
 
 		mv.addObject("navActive", NavIds.getInstance().getUsersStudent());
 		mv.setViewName("users/student/new-user");
-		mv.addObject("user", new UserVO(UserUtils.getUser(), false));
+		mv.addObject("user", new UserVO(userService.findByUsername(UserUtils.getUser().getUsername()), false));
 
 		return mv;
 	}
 
 	@RequestMapping(value = "/new-user", method = RequestMethod.POST)
-	public String newUserPost(Model model, @ModelAttribute("user") @Validated UserVO user, Errors errors, RedirectAttributes attributes, @RequestParam("image") MultipartFile imageFile) {
+	public String newRegistryPost(Model model, @ModelAttribute("user") @Validated UserVO user, Errors errors, RedirectAttributes attributes, @RequestParam("image") MultipartFile imageFile) {
 		try {
 			if (errors.hasErrors()) {
 				model.addAttribute("navActive", NavIds.getInstance().getUsersProfessor());
@@ -58,7 +58,7 @@ public class StudentController {
 
 			userService.save(user, imageFile);
 
-			String message = user.isNewUser() ? "message.param.created" : "message.param.updated";
+			String message = user.isNewRegistry() ? "message.param.created" : "message.param.updated";
 			attributes.addFlashAttribute("successMessage", messages.getMessageBy(message, messages.getMessageBy("label.user")));
 
 			return "redirect:/student/my-account";

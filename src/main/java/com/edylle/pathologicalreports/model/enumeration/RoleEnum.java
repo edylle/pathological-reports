@@ -11,12 +11,12 @@ import com.edylle.pathologicalreports.utils.Messages;
 
 public enum RoleEnum {
 
-	ADMIN("role.admin.description", "/admin/list-users"),
-	PROFESSOR("role.professor.description", "/professor/list-users"),
-	STUDENT("role.student.description", "/student/my-account");
+	ADMIN("role.description.admin", "/admin/list-users"),
+	PROFESSOR("role.description.professor", "/professor/list-users"),
+	STUDENT("role.description.student", "/student/my-account");
 
 	@Component
-	public static class RoleEnumServiceInjector {
+	public static class EnumServiceInjector {
 		@Autowired
 		private Messages messages;
 
@@ -39,6 +39,7 @@ public enum RoleEnum {
 		this.homeUrl = homeUrl;
 	}
 
+	// GETTERS AND SETTERS
 	public String getSpringSecurityRole() {
 		return springSecurityRole;
 	}
