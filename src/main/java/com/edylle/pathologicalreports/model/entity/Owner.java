@@ -1,22 +1,29 @@
 package com.edylle.pathologicalreports.model.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "OWNER")
 public class Owner implements Serializable {
 
-	private static final long serialVersionUID = -4882264914594515379L;
+	private static final long serialVersionUID = -8430919133896218180L;
 
 	@Id
 	@NotEmpty(message = "{validation.field.required.client.id}")
@@ -38,8 +45,27 @@ public class Owner implements Serializable {
 	@Column(name = "ADDRESS", length = 255)
 	private String address;
 
-	@OneToMany(mappedBy = "owner")
+	@NotNull
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@Column(name = "DATE_CREATED", nullable = false)
+	@Temporal(TemporalType.DATE)
+	private Date dateCreated;
+
+	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
 	private List<Animal> animals;
+
+	@Transient
+	private boolean isNewRegistry;
+
+	public Owner() {
+	}
+
+	public Owner(boolean isNewRegistry) {
+		this.isNewRegistry = isNewRegistry;
+
+		if (isNewRegistry)
+			dateCreated = new Date();
+	}
 
 	// GETTERS AND SETTERS
 	public String getId() {
@@ -74,12 +100,28 @@ public class Owner implements Serializable {
 		this.address = address;
 	}
 
+	public Date getDateCreated() {
+		return dateCreated;
+	}
+
+	public void setDateCreated(Date dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+
 	public List<Animal> getAnimals() {
 		return animals;
 	}
 
 	public void setAnimals(List<Animal> animals) {
 		this.animals = animals;
+	}
+
+	public boolean isNewRegistry() {
+		return isNewRegistry;
+	}
+
+	public void setNewRegistry(boolean isNewRegistry) {
+		this.isNewRegistry = isNewRegistry;
 	}
 
 }

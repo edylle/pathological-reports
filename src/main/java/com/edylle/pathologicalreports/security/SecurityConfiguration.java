@@ -60,6 +60,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.and()
 			.authorizeRequests()
 			.antMatchers("/login/select-role").hasAnyRole(RoleEnum.ADMIN.name(), RoleEnum.PROFESSOR.name(), RoleEnum.STUDENT.name())
+			.antMatchers("/owner/**").hasAnyRole(RoleEnum.ADMIN.name(), RoleEnum.PROFESSOR.name(), RoleEnum.STUDENT.name())
 		.and()
 			.formLogin()
 			.loginPage("/login")

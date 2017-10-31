@@ -85,7 +85,7 @@ public class ProfessorController {
 
 			userService.save(user, imageFile);
 
-			String message = user.isNewUser() ? "message.param.created" : "message.param.updated";
+			String message = user.isNewRegistry() ? "message.param.created" : "message.param.updated";
 			attributes.addFlashAttribute("successMessage", messages.getMessageBy(message, messages.getMessageBy("label.user")));
 
 			return "redirect:/professor/list-users";

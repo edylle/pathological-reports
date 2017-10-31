@@ -12,7 +12,8 @@
 			</form>
 
 			<a th:href="@{/professor/user/{username}(username=${loggedUsername})}">
-				<img th:src="${#strings.isEmpty(loggedImage)} ? @{/img/user-icon.png} : ${#httpServletRequest.getContextPath()} + ${loggedImage}" width="60" height="60"
+				<img th:src="${#strings.isEmpty(loggedImage)} ? @{/img/user-icon.png} : ${#httpServletRequest.getContextPath()} + ${loggedImage}"
+				     width="60" height="60"
 				     class="rounded-circle float-right img-my-account" style="margin-top: -5px;"
 				     th:title="#{label.my.account}" data-toggle="tooltip" data-placement="left" />
 			</a>
@@ -31,7 +32,7 @@
 
 			<form method="get" th:action="@{/professor/list-users}" th:object="${user}">
 				<div class="form-group">
-				 	<div class="input-group mb-2 mb-sm-0">
+				 	<div class="input-group">
 						<input type="text" class="form-control" th:field="*{usernameOrEmail}" th:placeholder="#{placeholder.username.or.email}" />
 						<button type="submit" class="btn input-group-addon cursor-pointer"
 						        th:title="#{label.search}" data-toggle="tooltip" data-placement="top">
@@ -122,7 +123,7 @@
 				</ul>
 			</nav>
 
-			<p class="float-right p-pagination-status"
+			<p class="float-right p-pagination-status" th:if="${users.totalPages gt 0}"
 			   th:utext="#{label.pagination.status(${users.getFromElement()}, ${users.getToElement()}, ${users.totalElements})}"></p>
 
 			<div layout:include="users/professor/modal-activate-user"></div>

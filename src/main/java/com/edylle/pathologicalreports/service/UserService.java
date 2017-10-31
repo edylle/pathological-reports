@@ -44,7 +44,7 @@ public class UserService {
 		User returnUser;
 
 		// creating a new user
-		if (user.isNewUser()) {
+		if (user.isNewRegistry()) {
 			if (findByUsername(user.getUsername()) != null) {
 				rejectedValues.put("username", messages.getMessageBy("message.param.duplicated", messages.getMessageBy("placeholder.username")));
 			}
@@ -136,11 +136,7 @@ public class UserService {
 			roleStr = Arrays.asList(dto.getRole().name());
 		}
 
-		if (StringUtils.isEmpty(dto.getUsernameOrEmail())) {
-			usernameOrEmail = "%%";
-		} else {
-			usernameOrEmail = "%".concat(dto.getUsernameOrEmail().toLowerCase()).concat("%");
-		}
+		usernameOrEmail = StringUtils.isEmpty(dto.getUsernameOrEmail()) ? "%%" : "%".concat(dto.getUsernameOrEmail().toLowerCase()).concat("%");
 
 		Pageable pageable = new PageRequest(page, size);
 		Page<User> pageInterface = userRepository.findBy(roleStr, usernameOrEmail, pageable);

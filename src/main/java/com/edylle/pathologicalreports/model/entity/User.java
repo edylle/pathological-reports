@@ -64,7 +64,7 @@ public class User implements Serializable {
 	@NotNull
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "DATE_CREATED", nullable = false)
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	private Date dateCreated;
 
 	@NotNull

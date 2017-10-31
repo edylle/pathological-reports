@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="users/layout">
+
+	<section layout:fragment="content">
+
+		<div class="container container-content">
+			<form>
+				<div layout:include="users/messages"></div>
+			</form>
+
+			<div class="clearfix">
+				<h3 th:text="#{label.owners}" class="float-left"></h3>
+				<a class="btn btn-success cursor-pointer float-right border rounded"
+				        th:title="#{label.new.owner}" data-toggle="tooltip" data-placement="left" th:href="@{/owner/new-owner}">
+				  <i class="fa fa-plus" aria-hidden="true"></i>
+				</a>
+ 			</div>
+
+	 		<hr style="margin-bottom: 30px;"/>
+
+			<form method="get" th:action="@{/owner/list-owners}" th:object="${owner}">
+				<div class="form-group">
+				 	<div class="input-group">
+						<input type="text" class="form-control col-md-6" th:field="*{id}" th:placeholder="#{placeholder.identification}" />
+					</div>
+				</div>
+
+				<div class="form-group">
+				 	<div class="input-group">
+						<input type="text" class="form-control" th:field="*{name}" th:placeholder="#{label.name}" />
+						<button type="submit" class="btn input-group-addon cursor-pointer"
+						        th:title="#{label.search}" data-toggle="tooltip" data-placement="top">
+							<i class="fa fa-search" aria-hidden="true"></i>
+						</button>
+					</div>
+				</div>
+			</form>
+
+			<div class="table-responsive">
+				<table class="table table-bordered table-striped table-hover">
+					<thead>
+						<tr>
+							<th class="text-left" th:text="#{label.id}"></th>
+							<th class="text-left" th:text="#{label.name}"></th>
+							<th></th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr th:each="owner : ${owners}">
+							<td class="text-left align-middle" th:text="${owner.id}"></td>
+							<td class="text-left align-middle" th:text="${owner.name}"></td>
+
+							<td class="text-center">
+								<a th:href="@{/owner/owner/{id}(id=${owner.id})}"
+								   style="margin-right: 10px; text-decoration: none;"
+								   th:title="#{label.view}" data-toggle="tooltip" data-placement="top">
+									<i class="fa fa-eye" aria-hidden="true"></i>
+								</a>
+							</td>
+						</tr>
+
+						<tr th:if="${owners.numberOfElements eq 0}">
+							<td colspan="4" th:text="#{message.no.owners.found}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<nav th:if="${owners.totalPages gt 0}" class="float-right">
+				<ul class="pagination justify-content-end">
+
+					<li class="page-item" th:classappend="${owners.first} ? 'disabled'">
+						<a class="page-link" th:href="@{/owner/list-owners(initialPage='0', id=${owner.id}, name=${owner.name})}"
+						   th:title="#{label.first}" rel="tooltip" data-placement="top">
+						   <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+						</a>
+					</li>
+					<li class="page-item" th:classappend="${!owners.hasPrevious()} ? 'disabled'">
+						<a class="page-link" th:href="@{/owner/list-owners(initialPage=${owners.number - 1}, id=${owner.id}, name=${owner.name})}"
+						   th:title="#{label.previous}" rel="tooltip" data-placement="top">
+							<i class="fa fa-angle-left" aria-hidden="true"></i>
+						</a>
+					</li>
+	
+					<li class="page-item" th:classappend="${!owners.hasNext()} ? 'disabled'">
+						<a class="page-link" th:href="@{/owner/list-owners(initialPage=${owners.number + 1}, id=${owner.id}, name=${owner.name})}"
+						   th:title="#{label.next}" rel="tooltip" data-placement="top">
+							<i class="fa fa-angle-right" aria-hidden="true"></i>
+						</a>
+					</li>
+					<li class="page-item" th:classappend="${owners.last} ? 'disabled'">
+						<a class="page-link" th:href="@{/owner/list-owners/(initialPage=${owners.totalPages - 1}, id=${owner.id}, name=${owner.name})}"
+						   th:title="#{label.last}" rel="tooltip" data-placement="top">
+							 <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+						</a>
+					</li>
+	
+				</ul>
+			</nav>
+
+			<p class="float-right p-pagination-status" th:if="${owners.totalPages gt 0}"
+			   th:utext="#{label.pagination.status(${owners.getFromElement()}, ${owners.getToElement()}, ${owners.totalElements})}"></p>
+
+		</div>
+
+	</section>
+
+</html>
