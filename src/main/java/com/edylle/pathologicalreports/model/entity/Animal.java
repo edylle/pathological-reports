@@ -24,7 +24,7 @@ import com.edylle.pathologicalreports.model.enumeration.SpeciesEnum;
 @Table(name = "ANIMAL")
 public class Animal implements Serializable {
 
-	private static final long serialVersionUID = 7262806980074041387L;
+	private static final long serialVersionUID = -1079189245216993626L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +37,7 @@ public class Animal implements Serializable {
 	private String name;
 
 	@Column(name = "YEARS_OLD", length = 2, nullable = false)
-	private Integer yearOld;
+	private Integer yearsOld;
 
 	@Column(name = "MONTHS_OLD", length = 2, nullable = false)
 	private Integer monthsOld;
@@ -84,12 +84,12 @@ public class Animal implements Serializable {
 		this.name = name;
 	}
 
-	public Integer getYearOld() {
-		return yearOld;
+	public Integer getYearsOld() {
+		return yearsOld;
 	}
 
-	public void setYearOld(Integer yearOld) {
-		this.yearOld = yearOld;
+	public void setYearsOld(Integer yearsOld) {
+		this.yearsOld = yearsOld;
 	}
 
 	public Integer getMonthsOld() {

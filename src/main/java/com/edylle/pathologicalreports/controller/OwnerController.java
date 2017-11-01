@@ -1,5 +1,7 @@
 package com.edylle.pathologicalreports.controller;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +22,8 @@ import com.edylle.pathologicalreports.exception.CrudException;
 import com.edylle.pathologicalreports.model.constant.NavIds;
 import com.edylle.pathologicalreports.model.dto.FindOwnerDTO;
 import com.edylle.pathologicalreports.model.entity.Owner;
+import com.edylle.pathologicalreports.model.enumeration.SexEnum;
+import com.edylle.pathologicalreports.model.enumeration.SpeciesEnum;
 import com.edylle.pathologicalreports.service.OwnerService;
 import com.edylle.pathologicalreports.utils.Messages;
 
@@ -35,6 +39,16 @@ public class OwnerController {
 	@ModelAttribute("getNavIds")
 	public NavIds getNavIds() {
 		return NavIds.getInstance();
+	}
+
+	@ModelAttribute("getSexes")
+	public List<SexEnum> getSexes() {
+		return Arrays.asList(SexEnum.values());
+	}
+
+	@ModelAttribute("getSpecies")
+	public List<SpeciesEnum> getSpecies() {
+		return Arrays.asList(SpeciesEnum.values());
 	}
 
 	@RequestMapping("list-owners")

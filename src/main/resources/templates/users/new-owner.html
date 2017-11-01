@@ -14,6 +14,10 @@
 				<input type="hidden" th:field="*{dateCreated}" />
 				<input type="hidden" th:field="*{newRegistry}" />
 
+				<script th:inline="javascript">
+					var owner = [[${owner}]];
+				</script>
+
 				<div layout:include="users/messages"></div>
 				<div layout:include="users/validation-messages"></div>
 
@@ -56,6 +60,53 @@
 					</div>
 				</div>
 
+				<div class="form-group row">
+					<div class="col-sm-4 offset-md-5">
+						<button type="button" class="btn btn-success cursor-pointer js-btn-new" th:classappend="!${owner.newRegistry} ? display-none"
+						        th:text="#{label.add.animal}" onclick="openAddAnimalModal()"></button>
+					</div>
+				</div>
+
+				<div class="table-responsive">
+					<table class="table table-bordered table-striped table-hover">
+						<thead>
+							<tr>
+								<th class="text-left" th:text="#{label.species}"></th>
+								<th class="text-left" th:text="#{label.breed.detailed.species}"></th>
+								<th class="text-left" th:text="#{label.years.old}"></th>
+								<th class="text-left" th:text="#{label.months.old}"></th>
+								<th class="text-left" th:text="#{label.days.old}"></th>
+								<th class="text-left" th:text="#{label.sex}"></th>
+								<th></th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<tr th:each="animal : ${owner.animals}">
+								<td class="text-left align-middle" th:text="${animal.species.description}"></td>
+								<td class="text-left align-middle" th:text="${animal.breed}" th:if="!${#strings.isEmpty(animal.breed)}"></td>
+								<td class="text-left align-middle" th:text="${animal.detailedSpecies}" th:if="!${#strings.isEmpty(animal.detailedSpecies)}"></td>
+								<td class="text-left align-middle" th:text="${animal.yearsOld}"></td>
+								<td class="text-left align-middle" th:text="${animal.monthsOld}"></td>
+								<td class="text-left align-middle" th:text="${animal.daysOld}"></td>
+								<td class="text-left align-middle" th:text="${animal.sex.description}"></td>
+
+								<td class="text-center">
+									<a href=""
+									   style="text-decoration: none;"
+									   th:title="#{label.edit}" data-toggle="tooltip" data-placement="top">
+										<i class="fa fa-pencil" aria-hidden="true"></i>
+									</a>
+								</td>
+							</tr>
+
+							<tr th:if="${#lists.isEmpty(owner.animals)}">
+								<td colspan="7" th:text="#{message.no.animals.found}"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
 				<br />
 
 				<div class="form-group row">
@@ -78,7 +129,73 @@
 
 			</form>
 
+			<div id="modal-add-animal" class="modal fade" tabindex="-1"
+				 role="dialog" aria-labelledby="modal-label-add-animal"
+				 aria-hidden="true">
+				<div class="modal-dialog" role="document">
+
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="modal-label-add-animal"
+								th:text="#{label.add.animal}"></h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+
+						<div class="modal-body">
+							<div class="form-group">
+								<select id="sex" class="custom-select" required="required">
+									<option value="" class="select-option" th:text="'- ' + #{label.select.sex} + ' -'" />
+									<option th:each="sex : ${getSexes}" th:value="${sex}" th:text="${sex.description}" />
+								</select>
+							</div>
+
+							<div class="form-group">
+								<select id="species" class="custom-select" required="required">
+									<option value="" class="select-option" th:text="'- ' + #{label.select.species} + ' -'" />
+									<option th:each="species : ${getSpecies}" th:value="${species}" th:text="${species.description}" />
+								</select>
+							</div>
+
+							<div class="form-group">
+					            <input type="text" class="form-control" id="animal-name"
+					                   maxlength="128" required="required" th:placeholder="#{label.name}"/>
+					        </div>
+
+							<div class="form-group">
+					            <input type="tel" class="form-control js-number-two-digits" id="animal-years-old"
+					                   maxlength="2" required="required" th:placeholder="#{label.years.old}"/>
+					        </div>
+
+							<div class="form-group">
+					            <input type="tel" class="form-control js-number-two-digits" id="animal-months-old"
+					                   maxlength="2" required="required" th:placeholder="#{label.months.old}"/>
+							</div>
+
+							<div class="form-group">
+					            <input type="tel" class="form-control js-number-two-digits" id="animal-days-old"
+					                   maxlength="2" required="required" th:placeholder="#{label.days.old}"/>
+							</div>
+
+						</div>
+
+						<div class="modal-footer">
+							<button type="button"
+								    class="btn btn-link cursor-pointer-no-shadow"
+								    style="text-decoration: none;" data-dismiss="modal"
+								    th:text="#{label.close}"></button>
+							<button type="button" class="btn btn-primary cursor-pointer"
+								    th:text="#{label.add}"></button>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
 		</div>
+
+		<script type="text/javascript" th:src="@{/js/animal-manager.js}"></script>
 
 	</section>
 

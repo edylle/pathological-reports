@@ -2,6 +2,7 @@ $(function() {
 	$('[data-toggle="tooltip"]').tooltip();
 	$('[rel="tooltip"]').tooltip();
 	$("#" + navActive).addClass("active");
+	$(".js-number-two-digits").mask("9?9");
 });
 
 function enableFields() {
