@@ -22,7 +22,7 @@ public class LoginDetailsService implements UserDetailsService {
 	@Autowired
 	private UserRepository userRepository;
 
-	final String ROLE_PREFIX = "ROLE_";
+	private static final String ROLE_PREFIX = "ROLE_";
 	private EmailValidator emailValidator = new EmailValidator();
 
 	@Override
@@ -38,10 +38,10 @@ public class LoginDetailsService implements UserDetailsService {
 		if (user == null || !user.getActive())
 			throw new UsernameNotFoundException("User " + username + " not found or not active");
 
-		return new LoggedUser(user.getUsername(), user.getPassword(), getAutorizacoes(user), user);
+		return new LoggedUser(user.getUsername(), user.getPassword(), getAuthorizations(user), user);
 	}
 
-	private Set<GrantedAuthority> getAutorizacoes(User user) {
+	private Set<GrantedAuthority> getAuthorizations(User user) {
 		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 
 		for (RoleEnum role : user.getRoles()) {

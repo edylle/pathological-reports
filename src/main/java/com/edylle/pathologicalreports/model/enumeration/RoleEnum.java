@@ -15,18 +15,6 @@ public enum RoleEnum {
 	PROFESSOR("role.description.professor", "/professor/list-users"),
 	STUDENT("role.description.student", "/student/my-account");
 
-	@Component
-	public static class EnumServiceInjector {
-		@Autowired
-		private Messages messages;
-
-		@PostConstruct
-		public void postConstruct() {
-			for (RoleEnum role : EnumSet.allOf(RoleEnum.class))
-				role.setMessages(messages);
-		}
-	}
-
 	private Messages messages;
 
 	private String springSecurityRole;
@@ -37,6 +25,18 @@ public enum RoleEnum {
 		springSecurityRole = "ROLE_".concat(this.name());
 		this.description = description;
 		this.homeUrl = homeUrl;
+	}
+
+	@Component
+	public static class EnumServiceInjector {
+		@Autowired
+		private Messages messages;
+
+		@PostConstruct
+		public void postConstruct() {
+			for (RoleEnum role : EnumSet.allOf(RoleEnum.class))
+				role.setMessages(messages);
+		}
 	}
 
 	// GETTERS AND SETTERS

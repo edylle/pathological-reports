@@ -54,7 +54,7 @@ public class User implements Serializable {
 	@Column(name = "PHONE_NUMBER", length = 16, nullable = false)
 	private String phoneNumber;
 
-	@NotEmpty(message = "{alidation.field.required.password}")
+	@NotEmpty(message = "{validation.field.required.password}")
 	@Column(name = "PASSWORD", length = 80, nullable = false)
 	private String password;
 
