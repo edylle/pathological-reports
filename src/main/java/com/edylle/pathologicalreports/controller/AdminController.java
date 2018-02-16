@@ -30,7 +30,6 @@ import com.edylle.pathologicalreports.service.UserService;
 import com.edylle.pathologicalreports.utils.Messages;
 import com.edylle.pathologicalreports.utils.UserUtils;
 
-
 @Controller
 @RequestMapping("/admin")
 public class AdminController {

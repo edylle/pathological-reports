@@ -53,7 +53,7 @@ public class UserVO implements Serializable {
 	}
 
 	public UserVO(User user, boolean isNewRegistry) {
-		this.isNewRegistry = isNewRegistry;
+		this(isNewRegistry);
 		username = user.getUsername();
 		email = user.getEmail();
 		phoneNumber = user.getPhoneNumber();

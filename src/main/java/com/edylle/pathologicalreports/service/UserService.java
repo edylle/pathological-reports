@@ -136,7 +136,7 @@ public class UserService {
 			roleStr = Arrays.asList(dto.getRole().name());
 		}
 
-		usernameOrEmail = StringUtils.isEmpty(dto.getUsernameOrEmail()) ? "%%" : "%".concat(dto.getUsernameOrEmail().toLowerCase()).concat("%");
+		usernameOrEmail = StringUtils.isBlank(dto.getUsernameOrEmail()) ? "%%" : "%".concat(dto.getUsernameOrEmail().toLowerCase()).concat("%");
 
 		Pageable pageable = new PageRequest(page, size);
 		Page<User> pageInterface = userRepository.findBy(roleStr, usernameOrEmail, pageable);

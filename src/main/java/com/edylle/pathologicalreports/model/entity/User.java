@@ -96,25 +96,25 @@ public class User implements Serializable {
 
 	public void orverrideUser(UserVO vo) {
 		if (vo.getActive() != null)
-			this.setActive(vo.getActive());
+			setActive(vo.getActive());
 
-		if (StringUtils.isNotEmpty(vo.getEmail()))
-			this.setEmail(vo.getEmail());
+		if (StringUtils.isNotBlank(vo.getEmail()))
+			setEmail(vo.getEmail());
 
-		if (StringUtils.isNotEmpty(vo.getPhoneNumber()))
-			this.setPhoneNumber(vo.getPhoneNumber());
+		if (StringUtils.isNotBlank(vo.getPhoneNumber()))
+			setPhoneNumber(vo.getPhoneNumber());
 
-		if (StringUtils.isNotEmpty(vo.getPassword()))
-			this.setPassword(vo.getPassword());
+		if (StringUtils.isNotBlank(vo.getPassword()))
+			setPassword(vo.getPassword());
 
-		if (StringUtils.isNotEmpty(vo.getImagePath()))
-			this.setImagePath(vo.getImagePath());
+		if (StringUtils.isNotBlank(vo.getImagePath()))
+			setImagePath(vo.getImagePath());
 
 		if (vo.getRole() != null) {
 			roles = new HashSet<>();
 			roles.add(vo.getRole());
 
-			this.setRoles(roles);
+			setRoles(roles);
 		}
 	}
 
